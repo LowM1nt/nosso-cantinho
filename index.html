@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jardim dos Laços 🎀</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rosa: '#FFD1DC',
+            marfim: '#FFFDD0',
+            cereja: '#D72638',
+            marrom: '#6B4F4F',
+          },
+          fontFamily: {
+            titulo: ['Fredoka', 'sans-serif'],
+            corpo: ['Quicksand', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="font-corpo text-marrom bg-rosa min-h-screen">
+
+  <!-- Tela 1: Login -->
+  <section id="screen-login" class="screen"></section>
+
+  <!-- Tela 2: Hub -->
+  <section id="screen-hub" class="screen hidden"></section>
+
+  <!-- Tela 3: Enigma -->
+  <section id="screen-enigma" class="screen hidden"></section>
+
+  <!-- Tela 4: Bloqueio -->
+  <section id="screen-bloqueio" class="screen hidden"></section>
+
+  <!-- Tela 5: Cofre -->
+  <section id="screen-cofre" class="screen hidden"></section>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

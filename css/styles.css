@@ -1,0 +1,16 @@
+/* css/styles.css — animações além do Tailwind */
+@keyframes float   { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes bounce2 { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes shimmer { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.25); } }
+@keyframes shake   { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+@keyframes pageflip{ from { transform: rotateY(0); opacity:1; } to { transform: rotateY(-90deg); opacity:0; } }
+
+.anim-float   { animation: float 3s ease-in-out infinite; }
+.anim-bounce  { animation: bounce2 1.2s ease-in-out infinite; }
+.anim-shimmer { animation: shimmer 2s ease-in-out infinite; }
+.anim-shake   { animation: shake 0.4s ease-in-out; }
+.anim-flip    { animation: pageflip 0.5s ease-in forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-float, .anim-bounce, .anim-shimmer, .anim-shake, .anim-flip { animation: none !important; }
+}
