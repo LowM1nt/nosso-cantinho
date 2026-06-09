@@ -19,7 +19,7 @@ export function renderCofre(state, persist, doc = document) {
     <p class="text-sm mb-4">Monte a senha: 🎀 _ _ _ 🎀</p>
     <div class="grid grid-cols-4 gap-2 mb-3">
       ${['HOT','EL','DE','LUXO'].map((hint,i) =>
-        `<input id="slot-${i}" maxlength="6" placeholder="${hint}"
+        `<input id="slot-${i}" maxlength="6" placeholder="${hint}" aria-label="fragmento ${i + 1}"
           class="w-full rounded-xl border-2 border-rosa px-2 py-3 text-center uppercase font-titulo" />`).join('')}
     </div>
     <button id="cofre-btn" class="rounded-full bg-cereja text-marfim font-titulo px-8 py-3 anim-bounce">Abrir 💖</button>

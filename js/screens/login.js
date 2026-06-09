@@ -10,7 +10,7 @@ export function renderLogin(onSuccess, doc = document) {
       <div class="text-6xl mb-2">🔒🎀</div>
       <h1 class="font-titulo text-2xl text-cereja mb-1">Diário Secreto</h1>
       <p class="text-sm mb-5">Sussurre a chavinha do nosso jardim 🌸</p>
-      <input id="login-input" type="text" autocomplete="off"
+      <input id="login-input" type="text" autocomplete="off" aria-label="senha do diário secreto"
         class="w-full rounded-full border-2 border-rosa px-4 py-3 text-center outline-none focus:border-cereja"
         placeholder="..." />
       <button id="login-btn"
