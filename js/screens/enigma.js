@@ -1,5 +1,5 @@
 import { CONFIG } from '../config.js';
-import { collectFragment, recordWrongAttempt, saveState } from '../state.js';
+import { collectFragment, recordWrongAttempt } from '../state.js';
 import { sendWhatsApp } from '../notify.js';
 import { decodeCipher, checkFase1 } from '../puzzles/fase1-cripto.js';
 import { checkFase2 } from '../puzzles/fase2-mapa.js';
