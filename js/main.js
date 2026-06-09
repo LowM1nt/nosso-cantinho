@@ -7,6 +7,7 @@ import { renderHub } from './screens/hub.js';
 import { renderBloqueio } from './screens/bloqueio.js';
 import { renderEnigma } from './screens/enigma.js';
 import { renderCofre } from './screens/cofre.js';
+import { installCharmGuard } from './effects/charmGuard.js';
 
 const storage = window.localStorage;
 let state = loadState(storage);
@@ -53,5 +54,6 @@ function goEnigma(fase) {
 function goCofre() { renderCofre(state, persist); showScreen('screen-cofre'); }
 
 // Entry point: always start at Login.
+installCharmGuard();
 renderLogin(enterHub);
 showScreen('screen-login');
