@@ -11,7 +11,8 @@ export function renderHub(state, faseHoje, onPickDay, doc = document) {
   const el = doc.getElementById('screen-hub');
   el.className = 'screen min-h-screen p-6';
   const cards = DIAS.map(d => {
-    const concluido = d.key !== 'sabado' && state.diasConcluidos[d.key];
+    const concluido = (d.key !== 'sabado' && state.diasConcluidos[d.key])
+      || (d.fase === 5 && state.cofreAberto); // sábado vira "concluído" após abrir o cofre
     const atual = d.fase === faseHoje;
     let visual, label;
     if (concluido)      { visual = 'bg-marfim border-4 border-emerald-300'; label = '🌈 💚'; }
