@@ -1,6 +1,7 @@
 import { CONFIG } from '../config.js';
 import { validateVaultCombo } from '../fragments.js';
 import { sendWhatsApp } from '../notify.js';
+import { imgFb } from '../ui-img.js';
 
 export function renderCofre(state, persist, doc = document) {
   const el = doc.getElementById('screen-cofre');
@@ -50,6 +51,9 @@ function revealVoucher(doc) {
   const box = doc.getElementById('voucher');
   box.classList.remove('hidden');
   box.innerHTML = `
+    <div class="-mt-2 mb-1">
+      ${imgFb('img/kitty-waving.png', { alt: 'gatinha comemorando', cls: 'w-24 mx-auto anim-float drop-shadow', fb: '🐱🎉', fbCls: 'text-5xl' })}
+    </div>
     <div class="text-5xl mb-2">🏨✨</div>
     <h3 class="font-titulo text-xl text-cereja mb-2">${v.titulo}</h3>
     <p class="mb-1"><strong>Hotel:</strong> ${v.hotel}</p>

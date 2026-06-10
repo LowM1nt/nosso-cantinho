@@ -7,6 +7,7 @@ import { parseCommand, isHackAttempt } from '../puzzles/fase3-quarto.js';
 import { checkSong } from '../puzzles/fase4-musica.js';
 import { triggerCuteOverflow } from '../effects/cuteOverflow.js';
 import { renderFadaScanner } from '../effects/fadaScanner.js';
+import { imgFb } from '../ui-img.js';
 
 const NOMES = { 1: 'Receita Secreta', 2: 'Mapa dos Encontros', 3: 'Organizador de Laços', 4: 'Caixinha de Música' };
 
@@ -58,6 +59,9 @@ function renderFase1(body, msg, win, wrong) {
   const desafio = desafios[0];
   const legendaHTML = Object.entries(legenda).map(([e, l]) => `${e}=${l}`).join(' &nbsp; ');
   body.innerHTML = `
+    <div class="float-right -mt-2 ml-2">
+      ${imgFb('img/kitty-strawberry.png', { alt: 'gatinha com morango', cls: 'w-20 anim-float drop-shadow', fb: '🍓', fbCls: 'text-4xl' })}
+    </div>
     <p class="mb-2">Decifre o ingrediente secreto 🍰</p>
     <p class="text-xl mb-1">${desafio.dica}</p>
     <p id="f1-legenda" class="text-sm mb-3">${legendaHTML}</p>
@@ -102,6 +106,9 @@ function renderFase2(body, msg, win, wrong) {
 function renderFase3(body, msg, win, wrong, state, persist) {
   const sugestoes = ['escrivaninha', 'cama', 'janela', 'guarda-roupa'];
   body.innerHTML = `
+    <div class="float-right -mt-2 ml-2">
+      ${imgFb('img/kitty-glasses.png', { alt: 'gatinha detetive de óculos', cls: 'w-20 anim-float drop-shadow', fb: '🔍🎀', fbCls: 'text-4xl' })}
+    </div>
     <p class="mb-2">Explore o quarto! Toque num lugar ou digite (ex: "olhar escrivaninha") 🎀</p>
     <div id="f3-chips" class="flex flex-wrap gap-2 mb-2">
       ${sugestoes.map(s => `<button data-cmd="${s}" class="rounded-full bg-rosa/60 px-3 py-1 text-sm">🔍 ${s}</button>`).join('')}

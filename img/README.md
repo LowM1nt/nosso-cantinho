@@ -1,12 +1,15 @@
 # Pasta de imagens 🎀
 
-Coloque aqui os PNGs (de preferência **com fundo transparente**) que a UI usa.
+PNGs com **fundo transparente** que a UI usa.
 Se algum arquivo faltar, o site mostra um emoji no lugar — nada quebra.
 
 | Arquivo | Onde aparece | Fallback se faltar |
 |---|---|---|
-| `kitty-sleeping.png` | Hello Kitty dormindo em cima do cronômetro (tela de bloqueio) | 😴🎀 |
-| `kitty.png` | Hello Kitty no Login e no Hub (decoração) | 🔒🎀 / 🐱 |
-| `bow.png` | Laço decorativo (opcional) | 🎀 |
+| `kitty-waving.png` | Login (grande), Hub (cabeçalho) e Cofre (comemoração) | 🐱🎀 |
+| `kitty-sleeping-bed.png` | Tela de bloqueio ("Hora do Soninho") | 🌙⭐😴🎀 |
+| `kitty-strawberry.png` | Fase 1 — Receita Secreta (cripto 🍓) | 🍓 |
+| `kitty-glasses.png` | Fase 3 — Organizador de Laços (quarto/detetive) | 🔍🎀 |
+
+> Os PNGs originais `[CITYPNG.COM]...` ficam guardados aqui como fonte; a UI usa as cópias de nome limpo acima.
 
 Depois de adicionar/remover imagens: `git add -A && git commit -m "imagens" && git push`.
