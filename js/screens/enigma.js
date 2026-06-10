@@ -82,6 +82,9 @@ function renderFase1(body, msg, win, wrong) {
 function renderFase2(body, msg, win, wrong) {
   const { alvo, raioAcertoPct, nomeLocal } = CONFIG.fase2;
   body.innerHTML = `
+    <div class="float-right -mt-2 ml-2">
+      ${imgFb('img/galeria/kitty-bolsa-viagem.png', { alt: 'gatinha passeando', cls: 'w-20 anim-float drop-shadow', fb: '🗺️🎀', fbCls: 'text-4xl' })}
+    </div>
     <p class="mb-2">Toque no coraçãozinho 💗 — foi ali ${nomeLocal} 🗺️👣</p>
     <div id="f2-map" class="relative w-full aspect-video rounded-2xl bg-gradient-to-br from-rosa via-marfim to-rosa cursor-pointer overflow-hidden border-2 border-rosa">
       <span class="absolute text-3xl" style="left:18%;top:24%">🌳</span>
