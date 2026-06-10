@@ -7,7 +7,9 @@ export function renderCofre(state, persist, doc = document) {
   el.className = 'screen min-h-screen p-6 flex flex-col items-center justify-center';
 
   // Pré-condição: 4 fragmentos (sábado já validado pelo roteador em main.js).
-  if (state.fragmentosColetados.length < 4) {
+  // BYPASS-DEV: ?bypass deixa abrir o cofre sem os 4 fragmentos (só teste). Remover depois.
+  const BYPASS = new URLSearchParams(window.location.search).has('bypass');
+  if (state.fragmentosColetados.length < 4 && !BYPASS) {
     el.innerHTML = `<div class="text-center"><div class="text-6xl mb-3">🔐</div>
       <p>O cofre só abre com os 4 fragmentos, princesa 🎀</p></div>`;
     return;

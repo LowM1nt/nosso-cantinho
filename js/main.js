@@ -10,6 +10,8 @@ import { renderCofre } from './screens/cofre.js';
 import { installCharmGuard } from './effects/charmGuard.js';
 
 const storage = window.localStorage;
+// BYPASS-DEV: ?bypass na URL libera todas as fases (só pra teste). Remover depois.
+const BYPASS = new URLSearchParams(window.location.search).has('bypass');
 let state = loadState(storage);
 if (!state.dataInicio) { state.dataInicio = CONFIG.dataInicio; saveState(storage, state); }
 
@@ -26,11 +28,13 @@ function showOffline() {
 
 async function enterHub() {
   const serverDate = await fetchServerDate();
-  if (!serverDate) return showOffline();          // never release on offline (PRD §6.3)
-  const phase = mapWeekdayToPhase(saoPauloWeekday(serverDate));
+  if (!serverDate && !BYPASS) return showOffline();   // never release on offline (PRD §6.3)
+  const phase = serverDate ? mapWeekdayToPhase(saoPauloWeekday(serverDate)) : { tipo: 'bypass' };
   const faseHoje = phase.tipo === 'fase' ? phase.fase : (phase.tipo === 'cofre' ? 5 : 0);
 
   renderHub(state, faseHoje, (fase, atual) => {
+    // BYPASS-DEV: libera qualquer dia/cofre sem checar data. Remover depois.
+    if (BYPASS) return fase === 5 ? goCofre() : goEnigma(fase);
     if (fase === 5 && phase.tipo === 'cofre') return goCofre();
     if (!atual) return goBloqueio('futuro');       // clicked a future/locked day
     if (state.diasConcluidos[dayKey(fase)]) return goBloqueio('concluido');
@@ -45,7 +49,8 @@ function goBloqueio(motivo) { renderBloqueio(motivo); showScreen('screen-bloquei
 
 function goEnigma(fase) {
   renderEnigma(fase, state, persist, {
-    onSolved: () => { state = loadState(storage); goBloqueio('concluido'); },
+    // BYPASS-DEV: no teste volta pro hub após resolver (em vez do bloqueio). Remover depois.
+    onSolved: () => { state = loadState(storage); BYPASS ? enterHub() : goBloqueio('concluido'); },
     onBack: enterHub,
   });
   showScreen('screen-enigma');
