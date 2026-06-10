@@ -13,6 +13,8 @@ import { answerMatches } from '../engine/answer.js';
 import { isDesktop } from '../games/viewport.js';
 import { renderQuartoGame } from '../games/quartoGame.js';
 import { renderRitmoGame } from '../games/ritmoGame.js';
+import { renderCozinhaGame } from '../games/cozinhaGame.js';
+import { renderMapaGame } from '../games/mapaGame.js';
 import { imgFb } from '../ui-img.js';
 
 const NOMES = { 1: 'Receita Secreta', 2: 'Mapa dos Encontros', 3: 'Detetive do Amor', 4: 'Caixinha de Música' };
@@ -61,6 +63,7 @@ export function renderEnigma(fase, state, persist, handlers, doc = document) {
 
 // ---------- Fase 1: Criptografia (leve) ----------
 function renderFase1(body, msg, win, wrong) {
+  if (isDesktop()) return renderCozinhaGame(body, { onWin: win, onWrong: wrong });  // desktop: jogo da cozinha
   const { legenda, desafios } = CONFIG.fase1;
   const desafio = desafios[0];
   const legendaHTML = Object.entries(legenda).map(([e, l]) => `${e}=${l}`).join(' &nbsp; ');
@@ -85,6 +88,7 @@ function renderFase1(body, msg, win, wrong) {
 
 // ---------- Fase 2: Mapa (leve) ----------
 function renderFase2(body, msg, win, wrong) {
+  if (isDesktop()) return renderMapaGame(body, { onWin: win, onWrong: wrong });  // desktop: jogo do mapa
   const { alvo, raioAcertoPct, nomeLocal } = CONFIG.fase2;
   body.innerHTML = `
     <div class="float-right -mt-2 ml-2">
