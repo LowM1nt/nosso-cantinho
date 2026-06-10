@@ -4,6 +4,8 @@ import { validateVaultCombo } from '../fragments.js';
 import { sendWhatsApp } from '../notify.js';
 import { answerMatches } from '../engine/answer.js';
 import { unlockedHintLevel } from '../engine/hints.js';
+import { isDesktop } from '../games/viewport.js';
+import { renderCofreGame } from '../games/cofreGame.js';
 import { imgFb, polaroidWall } from '../ui-img.js';
 
 export function renderCofre(state, persist, doc = document) {
@@ -85,8 +87,36 @@ function renderCadeados(el, state, persist, doc, onAllSolved) {
   });
 }
 
-// Senha final (montar os 4 fragmentos) + revelação.
+// Abre de fato o cofre (grava + notifica + revela voucher/mural).
+function openVault(state, persist, doc) {
+  state.cofreAberto = true; persist();
+  sendWhatsApp('🎉 Ela abriu o Cofre Final! HOTEL DE LUXO revelado 💖');
+  revealVoucher(doc);
+}
+
+// Senha final: no desktop vira minigame de arrombar; no celular, montar os 4 fragmentos.
 function renderVault(el, state, persist, doc) {
+  // containers da revelação (preenchidos por revealVoucher)
+  const voucherHTML = `
+    <p id="cofre-msg" class="text-cereja mt-3 h-6"></p>
+    <div id="voucher" class="hidden mt-6 glass-strong rounded-3xl p-6 max-w-sm text-center anim-fadeup"></div>
+    <div id="mural-fotos" class="hidden mt-8 w-full max-w-2xl"></div>`;
+
+  if (state.cofreAberto) { el.innerHTML = voucherHTML; return revealVoucher(doc); }
+
+  if (isDesktop()) {
+    const wrap = doc.createElement('div');
+    wrap.className = 'w-full max-w-md';
+    el.innerHTML = '';
+    el.appendChild(wrap);
+    const extra = doc.createElement('div');
+    extra.className = 'w-full max-w-2xl flex flex-col items-center';
+    extra.innerHTML = voucherHTML;
+    el.appendChild(extra);
+    renderCofreGame(wrap, { onOpen: () => { wrap.remove(); openVault(state, persist, doc); }, doc });
+    return;
+  }
+
   el.innerHTML = `
     <div class="text-6xl mb-3 anim-float">💎🔐</div>
     <h2 class="font-titulo text-2xl text-cereja mb-1">Cofre Final</h2>
@@ -97,9 +127,7 @@ function renderVault(el, state, persist, doc) {
           class="w-full rounded-xl glass border-2 border-rosa px-2 py-3 text-center uppercase font-titulo" />`).join('')}
     </div>
     <button id="cofre-btn" class="rounded-full bg-cereja text-marfim font-titulo px-8 py-3 anim-bounce btn-glow">Abrir 💖</button>
-    <p id="cofre-msg" class="text-cereja mt-3 h-6"></p>
-    <div id="voucher" class="hidden mt-6 glass-strong rounded-3xl p-6 max-w-sm text-center anim-fadeup"></div>
-    <div id="mural-fotos" class="hidden mt-8 w-full max-w-2xl"></div>`;
+    ${voucherHTML}`;
 
   const msg = doc.getElementById('cofre-msg');
   doc.getElementById('cofre-btn').addEventListener('click', () => {
@@ -110,12 +138,8 @@ function renderVault(el, state, persist, doc) {
       setTimeout(() => el.querySelector('.anim-float').classList.remove('anim-shake'), 400);
       return;
     }
-    state.cofreAberto = true; persist();
-    sendWhatsApp('🎉 Ela abriu o Cofre Final! HOTEL DE LUXO revelado 💖');
-    revealVoucher(doc);
+    openVault(state, persist, doc);
   });
-
-  if (state.cofreAberto) revealVoucher(doc); // re-entrar já aberto
 }
 
 function revealVoucher(doc) {
