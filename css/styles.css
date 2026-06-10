@@ -11,6 +11,31 @@
 .anim-shake   { animation: shake 0.4s ease-in-out; }
 .anim-flip    { animation: pageflip 0.5s ease-in forwards; }
 
+/* --- fundo de estrelas --- */
+#starfield { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.screen { position: relative; z-index: 1; }
+.star {
+  position: absolute; color: #fff; line-height: 1;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  animation: twinkle ease-in-out infinite, drift linear infinite;
+}
+@keyframes twinkle { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.95; } }
+@keyframes drift   { from { transform: translateY(10px); } to { transform: translateY(-20px); } }
+.shooting-star {
+  position: absolute; left: -10%; width: 90px; height: 2px; border-radius: 9999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  opacity: 0; transform: rotate(18deg);
+  animation: shoot 9s linear infinite;
+}
+@keyframes shoot {
+  0%   { left: -10%; top: 0; opacity: 0; }
+  6%   { opacity: 1; }
+  26%  { left: 110%; opacity: 0; }
+  100% { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .anim-float, .anim-bounce, .anim-shimmer, .anim-shake, .anim-flip { animation: none !important; }
+  .star { animation: none !important; opacity: 0.6 !important; }
+  .shooting-star { display: none !important; }
 }

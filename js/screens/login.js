@@ -1,13 +1,17 @@
 import { CONFIG } from '../config.js';
 import { normalizeText } from '../normalize.js';
+import { imgFb } from '../ui-img.js';
 
 // onSuccess() is called after the page-flip animation completes.
 export function renderLogin(onSuccess, doc = document) {
   const el = doc.getElementById('screen-login');
   el.className = 'screen flex flex-col items-center justify-center min-h-screen p-6';
   el.innerHTML = `
-    <div id="login-card" class="bg-marfim rounded-3xl shadow-xl p-8 w-full max-w-sm text-center anim-float">
-      <div class="text-6xl mb-2">🔒🎀</div>
+    <div id="login-card" class="relative bg-marfim rounded-3xl shadow-xl p-8 w-full max-w-sm text-center anim-float">
+      <div class="absolute -top-12 left-1/2 -translate-x-1/2">
+        ${imgFb('img/kitty.png', { alt: 'Hello Kitty', cls: 'w-24 anim-float', fb: '🐱🎀', fbCls: 'text-5xl' })}
+      </div>
+      <div class="text-5xl mb-2 mt-6">🔒🎀</div>
       <h1 class="font-titulo text-2xl text-cereja mb-1">Diário Secreto</h1>
       <p class="text-sm mb-5">Sussurre a chavinha do nosso jardim 🌸</p>
       <input id="login-input" type="text" autocomplete="off" aria-label="senha do diário secreto"

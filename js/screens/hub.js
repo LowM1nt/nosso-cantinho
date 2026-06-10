@@ -1,3 +1,5 @@
+import { imgFb } from '../ui-img.js';
+
 const DIAS = [
   { fase: 1, key: 'terca',  nome: 'Terça',  emoji: '🍓' },
   { fase: 2, key: 'quarta', nome: 'Quarta', emoji: '🗺️' },
@@ -27,7 +29,10 @@ export function renderHub(state, faseHoje, onPickDay, doc = document) {
   }).join('');
 
   el.innerHTML = `
-    <h1 class="font-titulo text-2xl text-cereja text-center mb-1">Jardim dos Laços 🎀</h1>
+    <div class="flex items-center justify-center gap-2 mb-1">
+      ${imgFb('img/kitty.png', { alt: '', cls: 'w-10', fb: '🐱', fbCls: 'text-3xl' })}
+      <h1 class="font-titulo text-2xl text-cereja text-center">Jardim dos Laços 🎀</h1>
+    </div>
     <p class="text-center text-sm mb-5">Fragmentos: ${state.fragmentosColetados.join(' ') || '—'}</p>
     <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 max-w-3xl mx-auto">${cards}</div>`;
 

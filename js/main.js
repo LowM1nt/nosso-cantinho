@@ -8,6 +8,8 @@ import { renderBloqueio } from './screens/bloqueio.js';
 import { renderEnigma } from './screens/enigma.js';
 import { renderCofre } from './screens/cofre.js';
 import { installCharmGuard } from './effects/charmGuard.js';
+import { installStarfield } from './effects/starfield.js';
+import { installImgFallback } from './ui-img.js';
 
 const storage = window.localStorage;
 // BYPASS-DEV: ?bypass na URL libera todas as fases (só pra teste). Remover depois.
@@ -59,6 +61,8 @@ function goEnigma(fase) {
 function goCofre() { renderCofre(state, persist); showScreen('screen-cofre'); }
 
 // Entry point: always start at Login.
+installImgFallback();   // habilita fallback de imagens antes de qualquer tela renderizar
+installStarfield();     // estrelinhas no fundo
 installCharmGuard();
 renderLogin(enterHub);
 showScreen('screen-login');
