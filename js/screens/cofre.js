@@ -1,7 +1,7 @@
 import { CONFIG } from '../config.js';
 import { validateVaultCombo } from '../fragments.js';
 import { sendWhatsApp } from '../notify.js';
-import { imgFb } from '../ui-img.js';
+import { imgFb, polaroidWall } from '../ui-img.js';
 
 export function renderCofre(state, persist, doc = document) {
   const el = doc.getElementById('screen-cofre');
@@ -27,7 +27,8 @@ export function renderCofre(state, persist, doc = document) {
     </div>
     <button id="cofre-btn" class="rounded-full bg-cereja text-marfim font-titulo px-8 py-3 anim-bounce">Abrir 💖</button>
     <p id="cofre-msg" class="text-cereja mt-3 h-6"></p>
-    <div id="voucher" class="hidden mt-6 bg-marfim rounded-3xl shadow-xl p-6 max-w-sm text-center"></div>`;
+    <div id="voucher" class="hidden mt-6 bg-marfim rounded-3xl shadow-xl p-6 max-w-sm text-center"></div>
+    <div id="mural-fotos" class="hidden mt-8 w-full max-w-2xl"></div>`;
 
   const msg = doc.getElementById('cofre-msg');
   doc.getElementById('cofre-btn').addEventListener('click', () => {
@@ -60,6 +61,16 @@ function revealVoucher(doc) {
     <p class="mb-1"><strong>Inclui:</strong> ${v.inclui}</p>
     <p class="mb-1"><strong>Validade:</strong> ${v.validade}</p>
     <p class="mt-3 italic">${v.dedicatoria}</p>`;
+
+  // mural de Polaroids do casal (clímax: as nossas fotos 🎀)
+  const mural = doc.getElementById('mural-fotos');
+  if (mural && CONFIG.fotos?.length) {
+    mural.classList.remove('hidden');
+    mural.innerHTML = `
+      <h3 class="font-titulo text-xl text-cereja text-center mb-4">📸 Nossas memórias 🎀</h3>
+      ${polaroidWall(CONFIG.fotos)}`;
+  }
+
   if (window.confetti) {
     const heart = window.confetti.shapeFromText ? window.confetti.shapeFromText({ text: '❤️' }) : undefined;
     window.confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 }, shapes: heart ? [heart] : undefined });

@@ -59,6 +59,16 @@ export const CONFIG = {
     dedicatoria: 'Dois anos atrás meu mundo ficou cor-de-rosa quando você chegou. Cada dia ao seu lado é a minha aventura favorita — e essa caixinha de surpresas é só um pedacinho do quanto eu te amo. Que venham infinitos fins de semana só nossos. Feliz 2 anos, meu maior laço. 🎀💖',
   },
 
+  // --- Mural de fotos (Polaroids no Cofre Final). Edite as legendas à vontade 🎀 ---
+  fotos: [
+    { arquivo: 'img/fotos/foto-1.jpg', legenda: 'euteamo 🌺' },
+    { arquivo: 'img/fotos/foto-2.jpg', legenda: 'nós dois 💖' },
+    { arquivo: 'img/fotos/foto-3.jpg', legenda: 'formatura 🎓' },
+    { arquivo: 'img/fotos/foto-4.jpg', legenda: 'nosso mundo 🌸' },
+    { arquivo: 'img/fotos/foto-5.jpg', legenda: 'nosso passeio 🎀' },
+    { arquivo: 'img/fotos/foto-6.jpg', legenda: 'nosso date ✨' },
+  ],
+
   // --- Webhook WhatsApp (CallMeBot) ---
   whatsapp: {
     ativo: false,                         // FALTA: mude para true depois de colar a apikey
