@@ -92,8 +92,8 @@ function renderVault(el, state, persist, doc) {
     <h2 class="font-titulo text-2xl text-cereja mb-1">Cofre Final</h2>
     <p class="text-sm mb-4 text-center max-w-sm">${CONTENT.fase5.montagem.dica}</p>
     <div class="grid grid-cols-4 gap-2 mb-3">
-      ${['HOT','EL','DE','LUXO'].map((hint,i) =>
-        `<input id="slot-${i}" maxlength="6" placeholder="${hint}" aria-label="fragmento ${i + 1}"
+      ${[0,1,2,3].map(i =>
+        `<input id="slot-${i}" maxlength="6" placeholder="🎀" aria-label="fragmento ${i + 1}"
           class="w-full rounded-xl glass border-2 border-rosa px-2 py-3 text-center uppercase font-titulo" />`).join('')}
     </div>
     <button id="cofre-btn" class="rounded-full bg-cereja text-marfim font-titulo px-8 py-3 anim-bounce btn-glow">Abrir 💖</button>

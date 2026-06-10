@@ -152,18 +152,17 @@ function renderFase3v2(body, state, persist, win, wrong) {
     },
   };
 
-  // Etapa 2: cifra -> viagem
-  const legendaHTML = Object.entries(C.cifra.legenda).map(([e, l]) => `${e}=${l}`).join(' &nbsp; ');
+  // Etapa 2: anagrama embaralhado -> viagem
   const etapa2 = textStep({
-    titulo: '📔 O diário abriu — decifre',
-    prompt: `Dentro do diário, uma frase cifrada:<br><span class="text-2xl">${C.cifra.cifrado}</span><br><span class="text-sm">${legendaHTML}</span>`,
-    resposta: C.cifra.resposta, hints: C.hints2, placeholder: 'palavra',
+    titulo: '📔 O diário abriu — desembaralhe',
+    prompt: `Dentro do diário, as letras estão embaralhadas:<br><span class="text-2xl tracking-widest">${C.anagrama.letras}</span><br><span class="text-sm">Forme a palavra usando todas elas. 🔤</span>`,
+    resposta: C.anagrama.resposta, hints: C.hints2, placeholder: 'palavra',
   });
 
   // Bônus: fragmento DE
   const bonus = textStep({
     titulo: '🎁 Baú secreto — o fragmento',
-    prompt: `Embaixo da cama, um bilhete cifrado: <b>${C.bonus.cifrado}</b>. Que pedacinho é esse?`,
+    prompt: `Embaixo da cama, um bilhete: "<b>${C.bonus.pista}</b>". Que pedacinho de 2 letras é esse?`,
     resposta: C.bonus.resposta, hints: [C.bonus.dica], placeholder: 'fragmento',
   });
 
@@ -214,7 +213,7 @@ function renderFase4v2(body, state, persist, win, wrong, doc) {
   });
 
   // Bônus: fragmento LUXO
-  const bonusHTML = C.bonus.acrostico.map(w => `<b>${w[0]}</b>${w.slice(1)}`).join(' · ');
+  const bonusHTML = C.bonus.acrostico.join(' · ');
   const bonus = textStep({
     titulo: '🎁 Baú secreto — o fragmento',
     prompt: `Um acróstico só seu: ${bonusHTML}. Junte as iniciais:`,
