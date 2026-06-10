@@ -78,9 +78,14 @@ function renderFase1(body, msg, win, wrong) {
 function renderFase2(body, msg, win, wrong) {
   const { alvo, raioAcertoPct, nomeLocal } = CONFIG.fase2;
   body.innerHTML = `
-    <p class="mb-2">Onde foi ${nomeLocal}? Toque no mapa 🗺️👣</p>
-    <div id="f2-map" class="relative w-full aspect-video rounded-2xl bg-gradient-to-br from-rosa to-marfim cursor-crosshair overflow-hidden">
-      <span class="absolute inset-0 flex items-center justify-center text-5xl opacity-40">🗺️</span>
+    <p class="mb-2">Toque no coraçãozinho 💗 — foi ali ${nomeLocal} 🗺️👣</p>
+    <div id="f2-map" class="relative w-full aspect-video rounded-2xl bg-gradient-to-br from-rosa via-marfim to-rosa cursor-pointer overflow-hidden border-2 border-rosa">
+      <span class="absolute text-3xl" style="left:18%;top:24%">🌳</span>
+      <span class="absolute text-3xl" style="left:74%;top:70%">☕</span>
+      <span class="absolute text-3xl" style="left:30%;top:74%">🌷</span>
+      <span class="absolute text-2xl opacity-60" style="left:48%;top:50%">🛍️</span>
+      <span id="f2-alvo" class="absolute text-4xl anim-bounce -translate-x-1/2 -translate-y-1/2"
+            style="left:${alvo.x}%;top:${alvo.y}%">💗</span>
     </div>`;
   const map = body.querySelector('#f2-map');
   map.addEventListener('click', e => {
@@ -95,17 +100,19 @@ function renderFase2(body, msg, win, wrong) {
 
 // ---------- Fase 3: Quarto ----------
 function renderFase3(body, msg, win, wrong, state, persist) {
+  const sugestoes = ['escrivaninha', 'cama', 'janela', 'guarda-roupa'];
   body.innerHTML = `
-    <p class="mb-2">Explore o quarto digitando comandos (ex: "olhar escrivaninha") 🎀</p>
+    <p class="mb-2">Explore o quarto! Toque num lugar ou digite (ex: "olhar escrivaninha") 🎀</p>
+    <div id="f3-chips" class="flex flex-wrap gap-2 mb-2">
+      ${sugestoes.map(s => `<button data-cmd="${s}" class="rounded-full bg-rosa/60 px-3 py-1 text-sm">🔍 ${s}</button>`).join('')}
+    </div>
     <div id="f3-log" class="text-sm bg-rosa/30 rounded-xl p-3 h-32 overflow-y-auto mb-2"></div>
     <input id="f3-input" class="w-full rounded-full border-2 border-rosa px-4 py-2" placeholder="o que fazer?" />`;
   const log = body.querySelector('#f3-log');
   const input = body.querySelector('#f3-input');
   function append(t) { log.insertAdjacentHTML('beforeend', `<p>› ${t}</p>`); log.scrollTop = log.scrollHeight; }
 
-  input.addEventListener('keydown', e => {
-    if (e.key !== 'Enter') return;
-    const val = input.value; input.value = '';
+  function run(val) {
     if (isHackAttempt(val)) {
       append('Tentou hackear? 🍓');
       triggerCuteOverflow(() => { state.easterEggDestravado = true; persist(); });
@@ -116,6 +123,14 @@ function renderFase3(body, msg, win, wrong, state, persist) {
     if (r.tipo === 'comando') return append(r.texto);
     append('Não encontrei nada por aí... 🌸');
     wrong();
+  }
+
+  body.querySelectorAll('#f3-chips button').forEach(b =>
+    b.addEventListener('click', () => run(b.dataset.cmd)));
+  input.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const val = input.value; input.value = '';
+    run(val);
   });
 }
 
@@ -133,8 +148,9 @@ function renderFase4(body, msg, win, wrong, handlers) {
       body.innerHTML = '<p class="text-center">Música certa! Falta só uma coisinha... ✨</p>';
       renderFadaScanner(win);
     } else {
-      wrong();
-      msg.textContent = 'Hmm, escuta de novo 🎶';
+      const n = wrong();
+      // dica de fallback após 3 erros (revela o nome da música)
+      msg.textContent = n >= 3 ? `Dica: a música é "${musica.resposta}" 🎵` : 'Hmm, escuta de novo 🎶';
     }
   });
 }
