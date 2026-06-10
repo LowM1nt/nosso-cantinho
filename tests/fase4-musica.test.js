@@ -7,3 +7,8 @@ test('checkSong ignores accents, case, and feat', () => {
   assert.equal(checkSong('nossa musica (feat. alguem)', 'nossa musica'), true);
   assert.equal(checkSong('outra cancao', 'nossa musica'), false);
 });
+
+test('checkSong ignores spaces (slowdown == slow down)', () => {
+  assert.equal(checkSong('slowdown', 'slow down'), true);
+  assert.equal(checkSong('Slow Down', 'slow down'), true);
+});

@@ -13,3 +13,8 @@ test('checkFase1 accepts the right word ignoring case/accents', () => {
   assert.equal(checkFase1('AMAR', 'amar'), true);
   assert.equal(checkFase1('amor', 'amar'), false);
 });
+
+test('checkFase1 ignores spaces (eu te amo == euteamo)', () => {
+  assert.equal(checkFase1('EU TE AMO', 'euteamo'), true);
+  assert.equal(checkFase1('eu te amo', 'euteamo'), true);
+});

@@ -5,5 +5,6 @@ export function decodeCipher(emojiString, legenda) {
 }
 
 export function checkFase1(userInput, respostaEsperada) {
-  return normalizeText(userInput) === normalizeText(respostaEsperada);
+  const norm = s => normalizeText(s).replace(/\s/g, ''); // ignora acento, caixa e espaços
+  return norm(userInput) === norm(respostaEsperada);
 }

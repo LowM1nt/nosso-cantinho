@@ -22,10 +22,12 @@ export function renderLogin(onSuccess, doc = document) {
   const card  = doc.getElementById('login-card');
   const msg   = doc.getElementById('login-msg');
 
+  // ignora acento, caixa E espaços ("meu amor" == "meuamor")
+  const semEspaco = s => normalizeText(s).replace(/\s/g, '');
   function tryUnlock() {
-    const guess = normalizeText(input.value);
-    const ok = guess === normalizeText(CONFIG.senhaLogin)
-            || guess === normalizeText(CONFIG.senhaRecuperacao);
+    const guess = semEspaco(input.value);
+    const ok = guess === semEspaco(CONFIG.senhaLogin)
+            || guess === semEspaco(CONFIG.senhaRecuperacao);
     if (ok) {
       card.classList.add('anim-flip');
       setTimeout(onSuccess, 500);
