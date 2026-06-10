@@ -8,6 +8,7 @@ export function defaultState() {
     fragmentosColetados: [],
     diasConcluidos: { terca: false, quarta: false, quinta: false, sexta: false },
     tentativasErradas: { fase1: 0, fase2: 0, fase3: 0, fase4: 0 },
+    progressoFases: {},   // { fase3: 2, ... } etapa atual salva pra retomar
     easterEggDestravado: false,
     scannerConcluido: false,
     cofreAberto: false,
@@ -56,4 +57,12 @@ export function markDayDone(state, fase) {
 export function recordWrongAttempt(state, fase) {
   const k = `fase${fase}`;
   return { ...state, tentativasErradas: { ...state.tentativasErradas, [k]: (state.tentativasErradas[k] || 0) + 1 } };
+}
+
+export function getPhaseStep(state, fase) {
+  return state.progressoFases?.[`fase${fase}`] ?? 0;
+}
+
+export function setPhaseStep(state, fase, idx) {
+  return { ...state, progressoFases: { ...state.progressoFases, [`fase${fase}`]: idx } };
 }

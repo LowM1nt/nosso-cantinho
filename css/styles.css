@@ -68,8 +68,41 @@
   z-index: 5;
 }
 
+/* --- Vidro fosco (glassmorphism) --- */
+.glass {
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(11px) saturate(140%);
+  -webkit-backdrop-filter: blur(11px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 10px 32px rgba(170, 80, 110, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.glass-strong {
+  background: rgba(255, 253, 248, 0.55);
+  backdrop-filter: blur(13px) saturate(150%);
+  -webkit-backdrop-filter: blur(13px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 12px 36px rgba(170, 80, 110, 0.26);
+}
+/* fundo gradiente rosa por cima do starfield */
+body { background: linear-gradient(160deg, #ffd1dc 0%, #ffe3ec 45%, #ffc2d6 100%) fixed; }
+
+/* micro-animações modernas */
+@keyframes fadeup { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.anim-fadeup { animation: fadeup 0.45s ease both; }
+.hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.hover-lift:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(170, 80, 110, 0.3); }
+.btn-glow { box-shadow: 0 6px 18px rgba(192, 31, 51, 0.4); transition: box-shadow 0.2s ease, transform 0.1s ease; }
+.btn-glow:hover { box-shadow: 0 0 22px rgba(255, 45, 111, 0.65); }
+.btn-glow:active { transform: scale(0.97); }
+
+/* barra de progresso de etapas */
+.step-dots { display: flex; gap: 8px; justify-content: center; }
+.step-dot { width: 10px; height: 10px; border-radius: 999px; background: rgba(215, 38, 56, 0.2); transition: background 0.3s; }
+.step-dot.done { background: #34d399; }
+.step-dot.current { background: #D72638; box-shadow: 0 0 8px rgba(215, 38, 56, 0.6); }
+
 @media (prefers-reduced-motion: reduce) {
-  .anim-float, .anim-bounce, .anim-shimmer, .anim-shake, .anim-flip { animation: none !important; }
+  .anim-float, .anim-bounce, .anim-shimmer, .anim-shake, .anim-flip, .anim-fadeup { animation: none !important; }
   .star { animation: none !important; opacity: 0.6 !important; }
   .shooting-star { display: none !important; }
 }
