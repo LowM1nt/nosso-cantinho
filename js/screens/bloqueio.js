@@ -18,7 +18,7 @@ export function renderBloqueio(motivo, doc = document) {
     <p class="max-w-xs mb-8">${msg}</p>
     <div class="relative inline-block">
       <span class="absolute -top-5 -right-3 text-2xl anim-float">💤</span>
-      <div id="bloqueio-timer" class="font-titulo text-3xl bg-marfim rounded-2xl px-6 py-3 shadow">--:--:--</div>
+      <div id="bloqueio-timer" class="font-titulo text-3xl glass-strong rounded-2xl px-6 py-3">--:--:--</div>
     </div>
     <p class="text-xs mt-3">Próxima aventura à meia-noite 🎀</p>`;
 

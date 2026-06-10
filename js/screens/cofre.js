@@ -1,14 +1,16 @@
 import { CONFIG } from '../config.js';
+import { CONTENT } from '../content.js';
 import { validateVaultCombo } from '../fragments.js';
 import { sendWhatsApp } from '../notify.js';
+import { answerMatches } from '../engine/answer.js';
+import { unlockedHintLevel } from '../engine/hints.js';
 import { imgFb, polaroidWall } from '../ui-img.js';
 
 export function renderCofre(state, persist, doc = document) {
   const el = doc.getElementById('screen-cofre');
   el.className = 'screen min-h-screen p-6 flex flex-col items-center justify-center';
 
-  // Pré-condição: 4 fragmentos (sábado já validado pelo roteador em main.js).
-  // BYPASS-DEV: ?bypass deixa abrir o cofre sem os 4 fragmentos (só teste). Remover depois.
+  // BYPASS-DEV: ?bypass deixa abrir o cofre sem os 4 fragmentos / sem charadas (só teste).
   const BYPASS = new URLSearchParams(window.location.search).has('bypass');
   if (state.fragmentosColetados.length < 4 && !BYPASS) {
     el.innerHTML = `<div class="text-center"><div class="text-6xl mb-3">🔐</div>
@@ -16,18 +18,87 @@ export function renderCofre(state, persist, doc = document) {
     return;
   }
 
+  // Já aberto, ou modo teste: vai direto pra senha. Senão, passa pelas 4 charadas.
+  if (state.cofreAberto || BYPASS) return renderVault(el, state, persist, doc);
+  renderCadeados(el, state, persist, doc, () => renderVault(el, state, persist, doc));
+}
+
+// 4 charadas (difícil) que destravam o cofre. Cada uma com dicas progressivas.
+function renderCadeados(el, state, persist, doc, onAllSolved) {
+  const cads = CONTENT.fase5.cadeados;
+  el.innerHTML = `
+    <div class="text-6xl mb-3 anim-float">🔐✨</div>
+    <h2 class="font-titulo text-2xl text-cereja mb-1">Cofre Final</h2>
+    <p class="text-sm mb-4 text-center max-w-sm">Quatro perguntas guardam o cofre. Responda todas pra liberar a senha 💝</p>
+    <div id="cads" class="w-full max-w-md grid gap-3"></div>`;
+  const host = doc.getElementById('cads');
+  let solved = 0;
+
+  cads.forEach((c, i) => {
+    const card = doc.createElement('div');
+    card.className = 'glass rounded-2xl p-4 anim-fadeup';
+    card.innerHTML = `
+      <p class="mb-2 text-sm">🔒 ${c.charada}</p>
+      <div class="flex gap-2">
+        <input id="cad-${i}" class="flex-1 rounded-full border-2 border-rosa px-3 py-2 text-center" placeholder="resposta" />
+        <button id="cadbtn-${i}" class="rounded-full bg-cereja text-marfim font-titulo px-4 btn-glow">✓</button>
+      </div>
+      <div id="cadhint-${i}" class="text-center mt-1"></div>
+      <p id="cadmsg-${i}" class="text-center text-cereja text-sm mt-1 h-5"></p>`;
+    host.appendChild(card);
+
+    const input = card.querySelector(`#cad-${i}`);
+    const btn = card.querySelector(`#cadbtn-${i}`);
+    const hintZone = card.querySelector(`#cadhint-${i}`);
+    const msg = card.querySelector(`#cadmsg-${i}`);
+    let attempts = 0;
+    const startedAt = Date.now();
+    let done = false;
+
+    function refreshHint() {
+      if (done) return;
+      const lvl = unlockedHintLevel(attempts, Date.now() - startedAt);
+      if (lvl <= 0) return;
+      const max = Math.min(lvl, c.hints.length);
+      hintZone.innerHTML = `<button class="text-xs underline opacity-80">🎀 dicinha (${max})</button><p class="text-xs mt-1 opacity-80"></p>`;
+      hintZone.querySelector('button').addEventListener('click', () => {
+        hintZone.querySelector('p').textContent = c.hints[max - 1];
+      });
+    }
+    const timer = setInterval(refreshHint, 20000);
+
+    function go() {
+      if (done) return;
+      if (answerMatches(input.value, c.resposta)) {
+        done = true; clearInterval(timer);
+        card.classList.add('border-4', 'border-emerald-300');
+        input.disabled = true; btn.disabled = true; hintZone.innerHTML = '';
+        msg.textContent = 'Isso! 💚';
+        solved++;
+        if (solved === cads.length) setTimeout(onAllSolved, 700);
+      } else {
+        attempts++; refreshHint(); msg.textContent = 'Hmm, não é essa 🌸';
+      }
+    }
+    btn.addEventListener('click', go);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  });
+}
+
+// Senha final (montar os 4 fragmentos) + revelação.
+function renderVault(el, state, persist, doc) {
   el.innerHTML = `
     <div class="text-6xl mb-3 anim-float">💎🔐</div>
     <h2 class="font-titulo text-2xl text-cereja mb-1">Cofre Final</h2>
-    <p class="text-sm mb-4">Monte a senha: 🎀 _ _ _ 🎀</p>
+    <p class="text-sm mb-4 text-center max-w-sm">${CONTENT.fase5.montagem.dica}</p>
     <div class="grid grid-cols-4 gap-2 mb-3">
       ${['HOT','EL','DE','LUXO'].map((hint,i) =>
         `<input id="slot-${i}" maxlength="6" placeholder="${hint}" aria-label="fragmento ${i + 1}"
-          class="w-full rounded-xl border-2 border-rosa px-2 py-3 text-center uppercase font-titulo" />`).join('')}
+          class="w-full rounded-xl glass border-2 border-rosa px-2 py-3 text-center uppercase font-titulo" />`).join('')}
     </div>
-    <button id="cofre-btn" class="rounded-full bg-cereja text-marfim font-titulo px-8 py-3 anim-bounce">Abrir 💖</button>
+    <button id="cofre-btn" class="rounded-full bg-cereja text-marfim font-titulo px-8 py-3 anim-bounce btn-glow">Abrir 💖</button>
     <p id="cofre-msg" class="text-cereja mt-3 h-6"></p>
-    <div id="voucher" class="hidden mt-6 bg-marfim rounded-3xl shadow-xl p-6 max-w-sm text-center"></div>
+    <div id="voucher" class="hidden mt-6 glass-strong rounded-3xl p-6 max-w-sm text-center anim-fadeup"></div>
     <div id="mural-fotos" class="hidden mt-8 w-full max-w-2xl"></div>`;
 
   const msg = doc.getElementById('cofre-msg');

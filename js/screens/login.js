@@ -7,7 +7,7 @@ export function renderLogin(onSuccess, doc = document) {
   const el = doc.getElementById('screen-login');
   el.className = 'screen flex flex-col items-center justify-center min-h-screen p-6';
   el.innerHTML = `
-    <div id="login-card" class="relative bg-marfim rounded-3xl shadow-xl p-8 w-full max-w-sm text-center anim-float">
+    <div id="login-card" class="relative glass-strong rounded-3xl p-8 w-full max-w-sm text-center anim-float anim-fadeup hover-lift">
       <div class="absolute -top-16 left-1/2 -translate-x-1/2">
         ${imgFb('img/kitty-waving.png', { alt: 'gatinha acenando', cls: 'w-28 anim-float drop-shadow', fb: '🐱🎀', fbCls: 'text-5xl' })}
       </div>
@@ -18,7 +18,7 @@ export function renderLogin(onSuccess, doc = document) {
         class="w-full rounded-full border-2 border-rosa px-4 py-3 text-center outline-none focus:border-cereja"
         placeholder="..." />
       <button id="login-btn"
-        class="mt-4 w-full rounded-full bg-cereja text-marfim font-titulo py-3 anim-bounce">🎀 Abrir 🎀</button>
+        class="mt-4 w-full rounded-full bg-cereja text-marfim font-titulo py-3 anim-bounce btn-glow">🎀 Abrir 🎀</button>
       <p id="login-msg" class="text-sm text-cereja mt-3 h-5"></p>
     </div>`;
 
