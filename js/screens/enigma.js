@@ -12,6 +12,7 @@ import { runPhase, textStep } from '../engine/phaseEngine.js';
 import { answerMatches } from '../engine/answer.js';
 import { isDesktop } from '../games/viewport.js';
 import { renderQuartoGame } from '../games/quartoGame.js';
+import { renderRitmoGame } from '../games/ritmoGame.js';
 import { imgFb } from '../ui-img.js';
 
 const NOMES = { 1: 'Receita Secreta', 2: 'Mapa dos Encontros', 3: 'Detetive do Amor', 4: 'Caixinha de Música' };
@@ -182,6 +183,7 @@ function renderFase4v2(body, state, persist, win, wrong, doc) {
   const etapa1 = {
     titulo: '🎵 Que música é essa, em caixinha?',
     render(host, ctx) {
+      if (isDesktop()) return renderRitmoGame(host, ctx);   // desktop: jogo de ritmo; mobile: identificar
       host.innerHTML = `
         <p class="mb-2">Ouça com carinho e diga o nome da música 🎧</p>
         <audio controls src="${musica.arquivo}" class="w-full mb-3"></audio>
