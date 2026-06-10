@@ -10,6 +10,8 @@ import { triggerCuteOverflow } from '../effects/cuteOverflow.js';
 import { renderFadaScanner } from '../effects/fadaScanner.js';
 import { runPhase, textStep } from '../engine/phaseEngine.js';
 import { answerMatches } from '../engine/answer.js';
+import { isDesktop } from '../games/viewport.js';
+import { renderQuartoGame } from '../games/quartoGame.js';
 import { imgFb } from '../ui-img.js';
 
 const NOMES = { 1: 'Receita Secreta', 2: 'Mapa dos Encontros', 3: 'Detetive do Amor', 4: 'Caixinha de Música' };
@@ -115,6 +117,7 @@ function renderFase3v2(body, state, persist, win, wrong) {
   const etapa1 = {
     titulo: '🔍 Vasculhe o quarto',
     render(host, ctx) {
+      if (isDesktop()) return renderQuartoGame(host, ctx);   // desktop: joguinho pixel; mobile: texto
       const chips = C.objetos.map((o, i) =>
         `<button data-i="${i}" class="rounded-full bg-rosa/60 px-3 py-1 text-sm">🔍 ${o.chaves[0]}</button>`).join('');
       host.innerHTML = `

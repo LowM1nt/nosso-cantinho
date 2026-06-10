@@ -101,6 +101,13 @@ body { background: linear-gradient(160deg, #ffd1dc 0%, #ffe3ec 45%, #ffc2d6 100%
 .step-dot.done { background: #34d399; }
 .step-dot.current { background: #D72638; box-shadow: 0 0 8px rgba(215, 38, 56, 0.6); }
 
+/* canvas de jogo pixelado (nítido, sem suavização) */
+.pixel-canvas {
+  image-rendering: pixelated; image-rendering: crisp-edges;
+  width: 100%; max-width: 460px; height: auto; display: block; margin: 0 auto;
+  background: #ffe3ec;
+}
+
 /* transição de entrada de tela (a cada troca) */
 @keyframes screenEnter { from { opacity: 0; transform: translateY(14px) scale(0.992); } to { opacity: 1; transform: none; } }
 .screen-enter { animation: screenEnter 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
