@@ -16,7 +16,7 @@ export function renderBloqueio(motivo, doc = document) {
     <p class="max-w-xs mb-10">${msg}</p>
     <div class="relative inline-block">
       <div class="absolute -top-16 left-1/2 -translate-x-1/2 anim-float">
-        ${imgFb('img/kitty-sleeping.png', { alt: 'Hello Kitty dormindo', cls: 'w-24', fb: '😴🎀', fbCls: 'text-5xl' })}
+        ${imgFb('img/kitty-sleeping.svg', { alt: 'gatinha dormindo', cls: 'w-24', fb: '😴🎀', fbCls: 'text-5xl' })}
       </div>
       <span class="absolute -top-7 -right-3 text-2xl anim-float">💤</span>
       <div id="bloqueio-timer" class="font-titulo text-3xl bg-marfim rounded-2xl px-6 py-3 shadow">--:--:--</div>

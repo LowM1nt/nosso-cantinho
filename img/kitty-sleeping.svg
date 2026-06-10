@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="gatinha dormindo">
+  <!-- orelhas -->
+  <path d="M40 72 L54 26 L94 58 Z" fill="#ffffff" stroke="#6b4f4f" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M160 72 L146 26 L106 58 Z" fill="#ffffff" stroke="#6b4f4f" stroke-width="3" stroke-linejoin="round"/>
+  <!-- cabeca -->
+  <ellipse cx="100" cy="112" rx="73" ry="58" fill="#ffffff" stroke="#6b4f4f" stroke-width="3"/>
+  <!-- bochechas coradas -->
+  <circle cx="56" cy="126" r="12" fill="#ffc1cf"/>
+  <circle cx="144" cy="126" r="12" fill="#ffc1cf"/>
+  <!-- olhos fechados (dormindo) -->
+  <g stroke="#3a2b2b" stroke-width="3.5" stroke-linecap="round" fill="none">
+    <path d="M70 110 Q78 119 86 110"/>
+    <path d="M114 110 Q122 119 130 110"/>
+  </g>
+  <!-- focinho -->
+  <ellipse cx="100" cy="126" rx="7" ry="5" fill="#f6b93b"/>
+  <!-- bigodes -->
+  <g stroke="#6b4f4f" stroke-width="2.5" stroke-linecap="round">
+    <line x1="28" y1="108" x2="63" y2="112"/>
+    <line x1="26" y1="122" x2="62" y2="122"/>
+    <line x1="28" y1="136" x2="63" y2="132"/>
+    <line x1="172" y1="108" x2="137" y2="112"/>
+    <line x1="174" y1="122" x2="138" y2="122"/>
+    <line x1="172" y1="136" x2="137" y2="132"/>
+  </g>
+  <!-- laco vermelho na orelha direita -->
+  <g transform="translate(138 58)">
+    <path d="M0 0 L-24 -13 L-24 13 Z" fill="#d72638"/>
+    <path d="M0 0 L24 -13 L24 13 Z" fill="#d72638"/>
+    <circle cx="0" cy="0" r="8" fill="#b81f2d"/>
+  </g>
+  <!-- zzz -->
+  <g fill="#6b4f4f" font-family="sans-serif" font-weight="700">
+    <text x="168" y="54" font-size="16">z</text>
+    <text x="180" y="40" font-size="20">Z</text>
+  </g>
+</svg>

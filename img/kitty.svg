@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="gatinha kawaii">
+  <!-- orelhas -->
+  <path d="M40 72 L54 26 L94 58 Z" fill="#ffffff" stroke="#6b4f4f" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M160 72 L146 26 L106 58 Z" fill="#ffffff" stroke="#6b4f4f" stroke-width="3" stroke-linejoin="round"/>
+  <!-- cabeca -->
+  <ellipse cx="100" cy="112" rx="73" ry="58" fill="#ffffff" stroke="#6b4f4f" stroke-width="3"/>
+  <!-- bochechas -->
+  <circle cx="56" cy="124" r="11" fill="#ffd1dc"/>
+  <circle cx="144" cy="124" r="11" fill="#ffd1dc"/>
+  <!-- olhos abertos -->
+  <ellipse cx="78" cy="108" rx="6.5" ry="9.5" fill="#3a2b2b"/>
+  <ellipse cx="122" cy="108" rx="6.5" ry="9.5" fill="#3a2b2b"/>
+  <!-- focinho -->
+  <ellipse cx="100" cy="124" rx="7" ry="5" fill="#f6b93b"/>
+  <!-- bigodes -->
+  <g stroke="#6b4f4f" stroke-width="2.5" stroke-linecap="round">
+    <line x1="28" y1="106" x2="63" y2="110"/>
+    <line x1="26" y1="120" x2="62" y2="120"/>
+    <line x1="28" y1="134" x2="63" y2="130"/>
+    <line x1="172" y1="106" x2="137" y2="110"/>
+    <line x1="174" y1="120" x2="138" y2="120"/>
+    <line x1="172" y1="134" x2="137" y2="130"/>
+  </g>
+  <!-- laco vermelho na orelha direita -->
+  <g transform="translate(138 58)">
+    <path d="M0 0 L-24 -13 L-24 13 Z" fill="#d72638"/>
+    <path d="M0 0 L24 -13 L24 13 Z" fill="#d72638"/>
+    <circle cx="0" cy="0" r="8" fill="#b81f2d"/>
+  </g>
+</svg>

@@ -9,7 +9,7 @@ export function renderLogin(onSuccess, doc = document) {
   el.innerHTML = `
     <div id="login-card" class="relative bg-marfim rounded-3xl shadow-xl p-8 w-full max-w-sm text-center anim-float">
       <div class="absolute -top-12 left-1/2 -translate-x-1/2">
-        ${imgFb('img/kitty.png', { alt: 'Hello Kitty', cls: 'w-24 anim-float', fb: '🐱🎀', fbCls: 'text-5xl' })}
+        ${imgFb('img/kitty.svg', { alt: 'gatinha', cls: 'w-24 anim-float', fb: '🐱🎀', fbCls: 'text-5xl' })}
       </div>
       <div class="text-5xl mb-2 mt-6">🔒🎀</div>
       <h1 class="font-titulo text-2xl text-cereja mb-1">Diário Secreto</h1>
