@@ -60,7 +60,7 @@ function renderFase1(body, msg, win, wrong) {
   const legendaHTML = Object.entries(legenda).map(([e, l]) => `${e}=${l}`).join(' &nbsp; ');
   body.innerHTML = `
     <div class="float-right -mt-2 ml-2">
-      ${imgFb('img/kitty-strawberry.png', { alt: 'gatinha com morango', cls: 'w-20 anim-float drop-shadow', fb: '🍓', fbCls: 'text-4xl' })}
+      ${imgFb('img/galeria/kitty-bolo.png', { alt: 'gatinha confeiteira', cls: 'w-20 anim-float drop-shadow', fb: '🍰', fbCls: 'text-4xl' })}
     </div>
     <p class="mb-2">Decifre o ingrediente secreto 🍰</p>
     <p class="text-xl mb-1">${desafio.dica}</p>
@@ -107,7 +107,7 @@ function renderFase3(body, msg, win, wrong, state, persist) {
   const sugestoes = ['escrivaninha', 'cama', 'janela', 'guarda-roupa'];
   body.innerHTML = `
     <div class="float-right -mt-2 ml-2">
-      ${imgFb('img/kitty-glasses.png', { alt: 'gatinha detetive de óculos', cls: 'w-20 anim-float drop-shadow', fb: '🔍🎀', fbCls: 'text-4xl' })}
+      ${imgFb('img/galeria/kitty-lendo-livro.png', { alt: 'gatinha lendo, investigando', cls: 'w-20 anim-float drop-shadow', fb: '📖🎀', fbCls: 'text-4xl' })}
     </div>
     <p class="mb-2">Explore o quarto! Toque num lugar ou digite (ex: "olhar escrivaninha") 🎀</p>
     <div id="f3-chips" class="flex flex-wrap gap-2 mb-2">
@@ -145,6 +145,9 @@ function renderFase3(body, msg, win, wrong, state, persist) {
 function renderFase4(body, msg, win, wrong, handlers) {
   const musica = CONFIG.fase4.musicas[0];
   body.innerHTML = `
+    <div class="float-right -mt-2 ml-2">
+      ${imgFb('img/galeria/kitty-bailarina.png', { alt: 'gatinha bailarina dançando', cls: 'w-20 anim-float drop-shadow', fb: '🩰🎵', fbCls: 'text-4xl' })}
+    </div>
     <p class="mb-2">Que música é essa, em caixinha? 🎵</p>
     <audio controls src="${musica.arquivo}" class="w-full mb-3"></audio>
     <input id="f4-input" class="w-full rounded-full border-2 border-rosa px-4 py-2 text-center" placeholder="nome da música" />
