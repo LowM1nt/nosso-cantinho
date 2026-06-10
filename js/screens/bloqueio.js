@@ -4,7 +4,8 @@ import { imgFb } from '../ui-img.js';
 let timer = null;
 
 // motivo: 'futuro' (tentou dia futuro) | 'concluido' (terminou enigma do dia)
-export function renderBloqueio(motivo, doc = document) {
+// onBack: opcional — volta pro jardim (hub).
+export function renderBloqueio(motivo, onBack, doc = document) {
   const el = doc.getElementById('screen-bloqueio');
   const msg = motivo === 'concluido'
     ? 'Que delícia de aventura! A Kitty foi dormir 😴 Volte amanhã!'
@@ -20,7 +21,11 @@ export function renderBloqueio(motivo, doc = document) {
       <span class="absolute -top-5 -right-3 text-2xl anim-float">💤</span>
       <div id="bloqueio-timer" class="font-titulo text-3xl glass-strong rounded-2xl px-6 py-3">--:--:--</div>
     </div>
-    <p class="text-xs mt-3">Próxima aventura à meia-noite 🎀</p>`;
+    <p class="text-xs mt-3">Próxima aventura à meia-noite 🎀</p>
+    <button id="bloqueio-back" class="mt-5 rounded-full glass px-6 py-2 font-titulo text-cereja hover-lift">← voltar ao jardim 🌸</button>`;
+
+  const back = doc.getElementById('bloqueio-back');
+  if (back) back.addEventListener('click', () => { stopBloqueio(); if (onBack) onBack(); });
 
   const out = doc.getElementById('bloqueio-timer');
   function tick() {

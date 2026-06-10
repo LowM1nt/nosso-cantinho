@@ -9,6 +9,8 @@ import { renderEnigma } from './screens/enigma.js';
 import { renderCofre } from './screens/cofre.js';
 import { installCharmGuard } from './effects/charmGuard.js';
 import { installStarfield } from './effects/starfield.js';
+import { installTapHearts } from './effects/tapHearts.js';
+import { installBgMusic } from './effects/bgMusic.js';
 import { installImgFallback } from './ui-img.js';
 
 const storage = window.localStorage;
@@ -47,7 +49,7 @@ async function enterHub() {
 
 function dayKey(fase) { return ['', 'terca', 'quarta', 'quinta', 'sexta'][fase]; }
 
-function goBloqueio(motivo) { renderBloqueio(motivo); showScreen('screen-bloqueio'); }
+function goBloqueio(motivo) { renderBloqueio(motivo, enterHub); showScreen('screen-bloqueio'); }
 
 function goEnigma(fase) {
   renderEnigma(fase, state, persist, {
@@ -63,6 +65,8 @@ function goCofre() { renderCofre(state, persist); showScreen('screen-cofre'); }
 // Entry point: always start at Login.
 installImgFallback();   // habilita fallback de imagens antes de qualquer tela renderizar
 installStarfield();     // estrelinhas no fundo
+installTapHearts();     // coraçãozinho que sobe ao tocar nos botões
+installBgMusic('audio/bg-music.mp3');  // música de fundo (chillpeach) em loop + botão de mudo
 installCharmGuard();
 renderLogin(enterHub);
 showScreen('screen-login');

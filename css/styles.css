@@ -101,8 +101,24 @@ body { background: linear-gradient(160deg, #ffd1dc 0%, #ffe3ec 45%, #ffc2d6 100%
 .step-dot.done { background: #34d399; }
 .step-dot.current { background: #D72638; box-shadow: 0 0 8px rgba(215, 38, 56, 0.6); }
 
+/* transição de entrada de tela (a cada troca) */
+@keyframes screenEnter { from { opacity: 0; transform: translateY(14px) scale(0.992); } to { opacity: 1; transform: none; } }
+.screen-enter { animation: screenEnter 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+/* coraçãozinho que sobe ao tocar */
+.tap-heart {
+  position: fixed; z-index: 50; pointer-events: none;
+  font-size: 22px; transform: translate(-50%, -50%);
+  animation: tapHeart 0.9s ease-out forwards;
+}
+@keyframes tapHeart {
+  0%   { opacity: 0.95; transform: translate(-50%, -50%) scale(0.6); }
+  100% { opacity: 0;    transform: translate(-50%, -160%) scale(1.2); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .anim-float, .anim-bounce, .anim-shimmer, .anim-shake, .anim-flip, .anim-fadeup { animation: none !important; }
+  .anim-float, .anim-bounce, .anim-shimmer, .anim-shake, .anim-flip, .anim-fadeup, .screen-enter { animation: none !important; }
   .star { animation: none !important; opacity: 0.6 !important; }
   .shooting-star { display: none !important; }
+  .tap-heart { display: none !important; }
 }
