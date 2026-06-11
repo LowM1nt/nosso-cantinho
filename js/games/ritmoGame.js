@@ -29,7 +29,7 @@ export function renderRitmoGame(host, ctx) {
   const g = canvas.getContext('2d');
   g.scale(S, S);
   const audio = host.querySelector('#ritmo-audio');
-  audio.volume = 0.5;
+  audio.volume = 0.9;
   const scoreEl = host.querySelector('#ritmo-score');
 
   const pattern = Array.from({ length: TOTAL }, (_, i) =>
