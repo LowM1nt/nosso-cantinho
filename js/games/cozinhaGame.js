@@ -6,7 +6,7 @@ export function renderCozinhaGame(host, { onWin, onWrong, doc = document }) {
   const BAD = ['🌶️', '🧦', '🦴', '🧅'];
 
   host.innerHTML = `
-    <p class="mb-2 text-sm">🍰 A receita secreta! Pegue os <b>fofos</b> (🍓⭐🎀🌸🍰💖) e evite os estranhos. Setas/A-D ou mouse.</p>
+    <p class="mb-2 text-sm">🍰 A receita secreta! Pegue os <b>fofos</b> (🍓⭐🎀🌸🍰💖) e evite os estranhos. Setas, mouse ou arraste/toque.</p>
     <canvas id="cozinha" width="${W}" height="${H}" class="pixel-canvas rounded-xl border-2 border-rosa mb-2"></canvas>
     <div class="flex items-center justify-between">
       <span id="cozinha-score" class="text-sm font-titulo">Receita: 0/${GOAL}</span>
@@ -113,10 +113,12 @@ export function renderCozinhaGame(host, { onWin, onWrong, doc = document }) {
   const ku = e => { const k = map[(e.key || '').toLowerCase()]; if (k) keys.delete(k); };
   window.addEventListener('keydown', kd);
   window.addEventListener('keyup', ku);
-  canvas.addEventListener('pointermove', e => {
+  const movePointer = e => {
     const r = canvas.getBoundingClientRect();
     bowl.x = Math.max(2, Math.min(W - bowl.w - 2, ((e.clientX - r.left) / r.width) * W - bowl.w / 2));
-  });
+  };
+  canvas.addEventListener('pointermove', movePointer);
+  canvas.addEventListener('pointerdown', movePointer);   // toque posiciona a tigela (mobile)
   restartBtn.addEventListener('click', restart);
 
   function cleanup() { cancelAnimationFrame(raf); window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku); }

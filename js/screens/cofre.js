@@ -4,7 +4,7 @@ import { validateVaultCombo } from '../fragments.js';
 import { sendWhatsApp } from '../notify.js';
 import { answerMatches } from '../engine/answer.js';
 import { unlockedHintLevel } from '../engine/hints.js';
-import { isDesktop } from '../games/viewport.js';
+import { gamesEnabled } from '../games/viewport.js';
 import { renderCofreGame } from '../games/cofreGame.js';
 import { imgFb, polaroidWall } from '../ui-img.js';
 
@@ -104,7 +104,7 @@ function renderVault(el, state, persist, doc) {
 
   if (state.cofreAberto) { el.innerHTML = voucherHTML; return revealVoucher(doc); }
 
-  if (isDesktop()) {
+  if (gamesEnabled()) {
     const wrap = doc.createElement('div');
     wrap.className = 'w-full max-w-md';
     el.innerHTML = '';

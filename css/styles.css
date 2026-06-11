@@ -104,7 +104,7 @@ body { background: linear-gradient(160deg, #ffd1dc 0%, #ffe3ec 45%, #ffc2d6 100%
 /* canvas de jogo pixelado (nítido, sem suavização) */
 .pixel-canvas {
   width: 100%; max-width: 480px; height: auto; display: block; margin: 0 auto;
-  background: #ffe3ec; border-radius: 6px;
+  background: #ffe3ec; border-radius: 6px; touch-action: none;
 }
 
 /* transição de entrada de tela (a cada troca) */

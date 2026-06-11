@@ -14,7 +14,7 @@ export function renderRitmoGame(host, ctx) {
   let PASS = 30;                                    // meta de acertos (ajusta pelo tamanho da música)
 
   host.innerHTML = `
-    <p class="mb-2 text-sm">🎵 As notas caem na batida! Toque <b>D F J K</b> (ou clique nas colunas) quando a nota chegar na linha. 💖</p>
+    <p class="mb-2 text-sm">🎵 As notas caem na batida! Toque nas <b>colunas</b> (ou teclas D F J K) quando a nota chegar na linha. 💖</p>
     <canvas id="ritmo" width="${W}" height="${H}" class="pixel-canvas rounded-xl border-2 border-rosa mb-2"></canvas>
     <div class="flex items-center justify-between gap-2">
       <button id="ritmo-start" class="rounded-full bg-cereja text-marfim font-titulo px-5 py-2 btn-glow">▶ Tocar</button>

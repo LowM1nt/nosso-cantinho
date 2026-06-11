@@ -10,7 +10,7 @@ import { triggerCuteOverflow } from '../effects/cuteOverflow.js';
 import { renderFadaScanner } from '../effects/fadaScanner.js';
 import { runPhase, textStep } from '../engine/phaseEngine.js';
 import { answerMatches } from '../engine/answer.js';
-import { isDesktop } from '../games/viewport.js';
+import { gamesEnabled } from '../games/viewport.js';
 import { renderQuartoGame } from '../games/quartoGame.js';
 import { renderRitmoGame } from '../games/ritmoGame.js';
 import { renderCozinhaGame } from '../games/cozinhaGame.js';
@@ -66,7 +66,7 @@ export function renderEnigma(fase, state, persist, handlers, doc = document) {
 
 // ---------- Fase 1: Criptografia (leve) ----------
 function renderFase1(body, msg, win, wrong) {
-  if (isDesktop()) return renderCozinhaGame(body, { onWin: win, onWrong: wrong });  // desktop: jogo da cozinha
+  if (gamesEnabled()) return renderCozinhaGame(body, { onWin: win, onWrong: wrong });  // jogo da cozinha (desktop e mobile)
   const { legenda, desafios } = CONFIG.fase1;
   const desafio = desafios[0];
   const legendaHTML = Object.entries(legenda).map(([e, l]) => `${e}=${l}`).join(' &nbsp; ');
@@ -91,7 +91,7 @@ function renderFase1(body, msg, win, wrong) {
 
 // ---------- Fase 2: Mapa (leve) ----------
 function renderFase2(body, msg, win, wrong) {
-  if (isDesktop()) return renderMapaGame(body, { onWin: win, onWrong: wrong });  // desktop: jogo do mapa
+  if (gamesEnabled()) return renderMapaGame(body, { onWin: win, onWrong: wrong });  // jogo do mapa (desktop e mobile)
   const { alvo, raioAcertoPct, nomeLocal } = CONFIG.fase2;
   body.innerHTML = `
     <div class="float-right -mt-2 ml-2">
@@ -125,7 +125,7 @@ function renderFase3v2(body, state, persist, win, wrong) {
   const etapa1 = {
     titulo: '🔍 Vasculhe o quarto',
     render(host, ctx) {
-      if (isDesktop()) return renderQuartoGame(host, ctx);   // desktop: joguinho pixel; mobile: texto
+      if (gamesEnabled()) return renderQuartoGame(host, ctx);   // joguinho pixel (desktop e mobile)
       const chips = C.objetos.map((o, i) =>
         `<button data-i="${i}" class="rounded-full bg-rosa/60 px-3 py-1 text-sm">🔍 ${o.chaves[0]}</button>`).join('');
       host.innerHTML = `
@@ -190,7 +190,7 @@ function renderFase4v2(body, state, persist, win, wrong, doc) {
   const etapa1 = {
     titulo: '🎵 Que música é essa, em caixinha?',
     render(host, ctx) {
-      if (isDesktop()) return renderRitmoGame(host, ctx);   // desktop: jogo de ritmo; mobile: identificar
+      if (gamesEnabled()) return renderRitmoGame(host, ctx);   // jogo de ritmo (desktop e mobile)
       host.innerHTML = `
         <p class="mb-2">Ouça com carinho e diga o nome da música 🎧</p>
         <audio controls src="${musica.arquivo}" class="w-full mb-3"></audio>
