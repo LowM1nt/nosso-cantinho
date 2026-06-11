@@ -19,7 +19,7 @@ export function renderRitmoGame(host, ctx) {
     <div class="flex items-center justify-between gap-2">
       <button id="ritmo-start" class="rounded-full bg-cereja text-marfim font-titulo px-5 py-2 btn-glow">▶ Tocar</button>
       <span id="ritmo-score" class="text-sm font-titulo">0</span>
-      <button id="ritmo-skip" class="text-xs underline opacity-80">prefiro digitar 🎵</button>
+      <button id="ritmo-skip" class="hidden text-xs underline opacity-80">prefiro digitar 🎵</button>
     </div>
     <audio id="ritmo-audio" src="${src}" preload="auto"></audio>`;
   ctx.hintButton(CONTENT.fase4.hints1);
@@ -32,8 +32,9 @@ export function renderRitmoGame(host, ctx) {
   audio.volume = 0.9;
   audio.addEventListener('ended', () => { if (playing) finish(); });
   const scoreEl = host.querySelector('#ritmo-score');
+  const skipBtn = host.querySelector('#ritmo-skip');
 
-  let pattern = [], notes = [], playing = false, hits = 0, raf = 0, startAt = 0, finished = false;
+  let pattern = [], notes = [], playing = false, hits = 0, raf = 0, startAt = 0, finished = false, attempts = 0;
 
   function buildPattern() {
     const dur = (audio.duration && isFinite(audio.duration)) ? audio.duration : 80;
@@ -75,7 +76,11 @@ export function renderRitmoGame(host, ctx) {
   function tryHit(lane) {
     if (!playing) return;
     const cand = pattern.find(p => !p.hit && !p.dead && p.lane === lane && Math.abs(p.y - HITY) <= HITWIN);
-    if (cand) { cand.hit = true; cand.dead = true; hits++; flash[lane] = 12; scoreEl.textContent = `${hits} / meta ${PASS}`; }
+    if (cand) {
+      cand.hit = true; cand.dead = true; hits++; flash[lane] = 12;
+      scoreEl.textContent = `${hits} / meta ${PASS}`;
+      if (hits >= PASS) finish();   // bateu a meta: avança na hora
+    }
   }
 
   function loop() {
@@ -90,8 +95,11 @@ export function renderRitmoGame(host, ctx) {
   function finish() {
     finished = true; playing = false;
     try { audio.pause(); } catch { /* */ }
-    if (hits >= PASS) { ctx.say(`Mandou bem! ${hits} acertos 💖`); cleanup(); setTimeout(() => ctx.solved(), 600); }
-    else { ctx.say(`Quase! ${hits} acertos. Toca de novo? ▶`); ctx.wrong(); }
+    if (hits >= PASS) { ctx.say(`Mandou bem! ${hits} acertos 💖`); cleanup(); setTimeout(() => ctx.solved(), 600); return; }
+    attempts++;
+    ctx.wrong();
+    if (attempts >= 3) { skipBtn.classList.remove('hidden'); ctx.say(`Quase! ${hits}/${PASS}. Toca de novo ▶ ou "prefiro digitar"`); }
+    else { ctx.say(`Quase! ${hits}/${PASS} (tentativa ${attempts}/3). Toca de novo? ▶`); }
   }
 
   function start() {
