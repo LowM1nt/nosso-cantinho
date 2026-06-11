@@ -16,6 +16,15 @@ import { installImgFallback } from './ui-img.js';
 const storage = window.localStorage;
 // BYPASS-DEV: ?bypass na URL libera todas as fases (só pra teste). Remover depois.
 const BYPASS = new URLSearchParams(window.location.search).has('bypass');
+
+// Reset único por versão: ao subir uma versão nova, zera o progresso uma vez
+// (pra pegar as atualizações e recomeçar do zero). Bump a string pra forçar reset.
+const GAME_VERSION = 'v2-jogos-sequencial';
+if (storage.getItem('gameVersion') !== GAME_VERSION) {
+  storage.removeItem('escapeRoomState');
+  storage.setItem('gameVersion', GAME_VERSION);
+}
+
 let state = loadState(storage);
 if (!state.dataInicio) { state.dataInicio = CONFIG.dataInicio; saveState(storage, state); }
 
@@ -36,16 +45,18 @@ async function enterHub() {
   const phase = serverDate ? mapWeekdayToPhase(saoPauloWeekday(serverDate)) : { tipo: 'bypass' };
   const faseHoje = phase.tipo === 'fase' ? phase.fase : (phase.tipo === 'cofre' ? 5 : 0);
 
-  renderHub(state, faseHoje, (fase, atual) => {
+  // liberação sequencial + catch-up de dias perdidos
+  const dayDone = f => (f === 5 ? state.cofreAberto : state.diasConcluidos[dayKey(f)]);
+  const prevDone = f => [1, 2, 3, 4].slice(0, f - 1).every(x => state.diasConcluidos[dayKey(x)]);
+  const dataChegou = f => faseHoje >= f && faseHoje > 0;
+
+  renderHub(state, faseHoje, (fase) => {
     // BYPASS-DEV: libera qualquer dia/cofre sem checar data. Remover depois.
     if (BYPASS) return fase === 5 ? goCofre() : goEnigma(fase);
-    if (fase === 5) {
-      if (state.cofreAberto || phase.tipo === 'cofre') return goCofre();  // revisitar / abrir no sábado
-      return goBloqueio('futuro');
-    }
-    if (state.diasConcluidos[dayKey(fase)]) return goEnigma(fase, true);  // revisitar dia concluído
-    if (!atual) return goBloqueio('futuro');       // clicked a future/locked day
-    goEnigma(fase);
+    if (dayDone(fase)) return fase === 5 ? goCofre() : goEnigma(fase, true);   // revisitar concluído
+    if (!dataChegou(fase)) return goBloqueio('futuro');                         // a data ainda não chegou
+    if (!prevDone(fase)) return goBloqueio('sequencia');                        // falta concluir dia anterior
+    return fase === 5 ? goCofre() : goEnigma(fase);                            // pode jogar
   });
   showScreen('screen-hub');
 }

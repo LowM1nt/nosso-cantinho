@@ -49,6 +49,12 @@
   <!-- Tela 5: Cofre -->
   <section id="screen-cofre" class="screen hidden"></section>
 
+  <!-- service worker: garante que ela sempre pega a versão nova (sem cache antigo) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => { /* sem SW: segue normal */ });
+    }
+  </script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

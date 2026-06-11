@@ -13,15 +13,19 @@ const DIAS = [
 export function renderHub(state, faseHoje, onPickDay, doc = document) {
   const el = doc.getElementById('screen-hub');
   el.className = 'screen min-h-screen p-6';
+  // liberação sequencial: só joga o próximo dia se os anteriores estiverem concluídos
+  const prevDone = f => [1, 2, 3, 4].slice(0, f - 1).every(x => state.diasConcluidos[DIAS[x - 1].key]);
   const cards = DIAS.map(d => {
     const concluido = (d.key !== 'sabado' && state.diasConcluidos[d.key])
       || (d.fase === 5 && state.cofreAberto); // sábado vira "concluído" após abrir o cofre
-    const atual = d.fase === faseHoje;
+    const dataChegou = faseHoje >= d.fase && faseHoje > 0;
+    const jogavel = !concluido && dataChegou && prevDone(d.fase);
     let visual, label;
-    if (concluido)      { visual = 'glass border-4 border-emerald-300 cursor-pointer hover-lift'; label = '🌈 rever'; }
-    else if (atual)     { visual = 'glass-strong border-4 border-cereja anim-shimmer cursor-pointer hover-lift'; label = '✨ Hoje!'; }
-    else                { visual = 'bg-white/30 text-gray-400 border border-white/50'; label = '😴🔒'; }
-    return `<button data-fase="${d.fase}" data-atual="${atual}"
+    if (concluido)        { visual = 'glass border-4 border-emerald-300 cursor-pointer hover-lift'; label = '🌈 rever'; }
+    else if (jogavel)     { visual = 'glass-strong border-4 border-cereja anim-shimmer cursor-pointer hover-lift'; label = '✨ jogar!'; }
+    else if (dataChegou)  { visual = 'bg-white/30 text-gray-500 border border-white/50 cursor-pointer'; label = '🔒 anteriores'; }
+    else                  { visual = 'bg-white/30 text-gray-400 border border-white/50'; label = '😴🔒'; }
+    return `<button data-fase="${d.fase}"
         class="rounded-3xl p-5 flex flex-col items-center anim-float anim-fadeup ${visual}">
         <span class="text-4xl mb-1">${d.emoji}</span>
         <span class="font-titulo">${d.nome}</span>
@@ -42,6 +46,6 @@ export function renderHub(state, faseHoje, onPickDay, doc = document) {
 
   el.querySelector('#hub-flappy').addEventListener('click', () => openFlappy(doc));
   el.querySelectorAll('button[data-fase]').forEach(btn => {
-    btn.addEventListener('click', () => onPickDay(Number(btn.dataset.fase), btn.dataset.atual === 'true'));
+    btn.addEventListener('click', () => onPickDay(Number(btn.dataset.fase)));
   });
 }
