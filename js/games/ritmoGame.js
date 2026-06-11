@@ -40,7 +40,7 @@ export function renderRitmoGame(host, ctx) {
     const n = Math.max(20, Math.floor((dur - START_T - 0.6) / BEAT));
     pattern = Array.from({ length: n }, (_, i) =>
       ({ t: START_T + i * BEAT, lane: LANE_SEQ[i % LANE_SEQ.length], y: -20, hit: false, dead: false }));
-    PASS = Math.min(30, Math.max(15, Math.round(pattern.length * 0.45)));
+    PASS = Math.min(160, pattern.length);   // meta de 160 acertos (limitada ao nº de notas)
   }
   const flash = [0, 0, 0, 0];
 
@@ -79,7 +79,7 @@ export function renderRitmoGame(host, ctx) {
   }
 
   function loop() {
-    if (!canvas.isConnected) return cleanup();
+    if (!canvas.isConnected || canvas.offsetParent === null) return cleanup();   // saiu/escondeu: para tudo
     if (playing) move();
     draw();
     const now = (Date.now() - startAt) / 1000;

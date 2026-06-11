@@ -31,7 +31,10 @@ export function renderEnigma(fase, state, persist, handlers, doc = document) {
     </header>
     <div id="enigma-body" class="max-w-lg mx-auto glass-strong rounded-3xl p-6 anim-fadeup"></div>
     <p id="enigma-msg" class="text-center text-cereja mt-3 h-6"></p>`;
-  doc.getElementById('enigma-back').addEventListener('click', handlers.onBack);
+  doc.getElementById('enigma-back').addEventListener('click', () => {
+    el.querySelectorAll('audio').forEach(a => { try { a.pause(); } catch { /* */ } });  // para a música ao voltar
+    handlers.onBack();
+  });
 
   const body = doc.getElementById('enigma-body');
   const msg = doc.getElementById('enigma-msg');
