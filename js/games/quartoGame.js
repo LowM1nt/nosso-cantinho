@@ -56,11 +56,19 @@ export function renderQuartoGame(host, ctx, doc = document) {
   const px = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), w, h); };
 
   function drawRoom() {
-    px(0, 0, W, H, '#ffe3ec');                 // fundo
-    px(0, 0, W, 22, '#f6c0d3');                // parede
-    for (let x = 0; x < W; x += 8) for (let y = 22; y < H; y += 8)
-      px(x, y, 7, 7, (x + y) % 16 === 0 ? '#ffd7e4' : '#ffe9f0'); // piso xadrez
-    px(0, 20, W, 2, '#e79bb6');                // rodapé
+    // parede com papel de parede (listras + bolinhas)
+    px(0, 0, W, 60, '#f8c8da');
+    for (let x = 0; x < W; x += 12) px(x, 0, 6, 60, '#f3b9d0');
+    for (let x = 6; x < W; x += 16) for (let y = 10; y < 56; y += 14) px(x, y, 2, 2, 'rgba(255,255,255,.6)');
+    px(0, 58, W, 3, '#caa06f');                // rodapé
+    // piso de madeira (tábuas)
+    for (let y = 61; y < H; y += 11) {
+      px(0, y, W, 10, (((y / 11) | 0) % 2) ? '#e7c89a' : '#e1bf8f');
+      px(0, y + 9, W, 1, 'rgba(160,120,70,.45)');
+    }
+    // varalzinho de corações na parede
+    px(6, 6, 78, 1, '#e79bb6');
+    for (let i = 0; i < 6; i++) px(10 + i * 13, 7, 3, 3, ['#ff5e8a', '#ffd400', '#9a7bff'][i % 3]);
   }
 
   function drawObj(o, active) {

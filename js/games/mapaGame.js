@@ -37,21 +37,58 @@ export function renderMapaGame(host, { onWin, onWrong, doc = document }) {
 
   const px = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), w, h); };
 
-  function drawMap() {
-    px(0, 0, W, H, '#bfe3a6');                              // grama
-    for (let x = 0; x < W; x += 9) for (let y = 0; y < H; y += 9) if ((x + y) % 18 === 0) px(x, y, 4, 4, '#b2dd96');
-    px(W / 2 - 7, 56, 14, H - 56, '#e8d8b0');               // caminho vertical
-    px(24, 104, W - 48, 12, '#e8d8b0');                     // caminho horizontal
+  // cenário decorativo
+  const tufos = [];
+  for (let i = 0; i < 34; i++) tufos.push({ x: (i * 53) % W, y: 36 + ((i * 71) % (H - 54)), c: ['#ff5e8a', '#ffd400', '#9a7bff', '#fff'][i % 4] });
+  const arvores = [[6, 124], [298, 70], [150, 200], [292, 204], [120, 60]];
+
+  function path(x, y, w, h) {
+    px(x, y, w, h, '#e7d3a6');
+    px(x, y, w, 2, '#d6bd84'); px(x, y + h - 2, w, 2, '#d6bd84');
+    for (let i = 0; i < w; i += 9) for (let j = 0; j < h; j += 9) px(x + i + 3, y + j + 3, 2, 2, '#dcc593');
+  }
+  function tree(x, y) { px(x + 4, y + 10, 3, 7, '#8a5a32'); px(x, y, 11, 12, '#5fa84f'); px(x + 1, y - 3, 9, 5, '#6fbf5c'); px(x + 3, y + 2, 2, 2, '#8fd47a'); }
+  function awning(x, y, w, c) { for (let i = 0; i < w - 2; i += 6) { px(x + i, y, 3, 4, c); px(x + i + 3, y, 3, 4, '#fff'); } }
+  function windows(x, y, w, h) {
+    for (let c = 0; c * 11 < w - 9; c++) for (let r = 0; r * 11 < h - 4; r++) {
+      px(x + 6 + c * 11, y + 3 + r * 11, 7, 7, '#bfe6ff'); px(x + 6 + c * 11, y + 3 + r * 11, 7, 2, '#fff');
+    }
   }
 
+  function drawMap() {
+    for (let y = 0; y < H; y += 6) for (let x = 0; x < W; x += 6)
+      px(x, y, 6, 6, ((x / 6 + y / 6) | 0) % 2 === 0 ? '#aedd8e' : '#a4d683');
+    tufos.forEach(f => { px(f.x, f.y + 2, 1, 2, '#5a8a3a'); px(f.x - 1, f.y, 3, 2, f.c); });
+    path(W / 2 - 9, 50, 18, H - 50);
+    path(20, 98, W - 40, 16);
+  }
+
+  function drawScenery() { arvores.forEach(([x, y]) => tree(x, y)); }
+
   function drawLocal(l) {
-    if (l === near) { g.strokeStyle = '#ffd400'; g.lineWidth = 2; g.strokeRect(l.x - 2, l.y - 2, l.w + 4, l.h + 4); }
-    px(l.x, l.y, l.w, l.h, l.cor);
-    if (l.id === 'shopping') { px(l.x + 4, l.y + 4, l.w - 8, 8, '#fff'); px(l.x + 8, l.y + l.h - 12, 10, 12, '#caa2b6'); }
-    if (l.id === 'cafe') px(l.x + l.w / 2 - 2, l.y - 4, 4, 5, '#fff');     // fumacinha
-    if (l.id === 'parque') { px(l.x + l.w / 2 - 2, l.y + l.h, 4, 6, '#7a5230'); }
-    g.fillStyle = '#3b2b2b'; g.font = '6px sans-serif'; g.textAlign = 'center';
-    g.fillText(l.label, l.x + l.w / 2, l.y - 4 < 8 ? l.y + l.h + 8 : l.y - 4);
+    const { x, y, w, h } = l;
+    if (l === near) { g.strokeStyle = '#ffd400'; g.lineWidth = 2; g.strokeRect(x - 3, y - 3, w + 6, h + 6); }
+    g.fillStyle = 'rgba(0,0,0,.12)'; g.fillRect(x + 3, y + h, w, 3);
+    if (l.id === 'parque') {
+      tree(x + 2, y + 4); tree(x + 15, y + 16);
+      px(x + 2, y + h - 7, w - 4, 4, '#9a6b3f'); px(x + 3, y + h - 12, 2, 6, '#7a5230'); px(x + w - 5, y + h - 12, 2, 6, '#7a5230');
+    } else if (l.id === 'flores') {
+      px(x, y + h - 6, w, 6, '#8a5a3c');
+      for (let i = 0; i < 4; i++) { px(x + 3 + i * 6, y + 1, 1, h - 7, '#5a8a3a'); px(x + 2 + i * 6, y - 1, 3, 3, ['#ff5e8a', '#ffd400', '#9a7bff', '#ff8fb1'][i % 4]); }
+    } else {
+      px(x, y, w, h, l.cor);
+      g.fillStyle = 'rgba(255,255,255,.18)'; g.fillRect(x, y, w, 5);
+      g.fillStyle = 'rgba(0,0,0,.16)'; g.fillRect(x, y + 5, w, 2);
+      windows(x, y + 8, w, h - 18);
+      px(x + w / 2 - 5, y + h - 12, 10, 12, '#7c5a4a');
+      px(x + w / 2 + 2, y + h - 6, 1, 2, '#ffd400');
+      if (l.id === 'cafe') awning(x, y + 6, w, '#e23a52');
+      if (l.id === 'sorvete') { awning(x, y + 6, w, '#ff8fb1'); px(x + w / 2 - 1, y - 8, 2, 6, '#e8b06a'); px(x + w / 2 - 2, y - 11, 4, 4, '#ff9ec0'); }
+      if (l.id === 'shopping') px(x + 5, y - 7, w - 10, 6, '#fff');
+      if (l.id === 'cinema') { px(x + 3, y - 6, w - 6, 5, '#2b2b3b'); for (let i = 0; i < 4; i++) px(x + 7 + i * ((w - 14) / 3), y - 5, 2, 2, '#ffd400'); }
+    }
+    g.fillStyle = '#3b2b2b'; g.font = '7px sans-serif'; g.textAlign = 'center';
+    g.fillText(l.label, x + w / 2, y + h + 9);
   }
 
   function drawKitty(x, y) {
@@ -64,6 +101,7 @@ export function renderMapaGame(host, { onWin, onWrong, doc = document }) {
 
   function render() {
     drawMap();
+    drawScenery();
     locais.forEach(drawLocal);
     drawKitty(kitty.x, kitty.y);
   }
