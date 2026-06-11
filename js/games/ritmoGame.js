@@ -44,6 +44,8 @@ export function renderRitmoGame(host, ctx) {
     PASS = Math.min(160, pattern.length);   // meta de 160 acertos (limitada ao nº de notas)
   }
   const flash = [0, 0, 0, 0];
+  let tintC = '#34d399', tintT = 0;
+  const tint = c => { tintC = c; tintT = 10; };   // verde acerto / vermelho erro (bem leve)
 
   const px = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), w, h); };
 
@@ -61,6 +63,7 @@ export function renderRitmoGame(host, ctx) {
       px(x - 7, n.y - 6, 14, 12, n.hit ? '#9be29b' : '#ff5e8a');
       px(x - 4, n.y - 3, 8, 6, '#fff');
     });
+    if (tintT > 0) { g.fillStyle = tintC; g.globalAlpha = (tintT / 10) * 0.12; g.fillRect(0, 0, W, H); g.globalAlpha = 1; tintT--; }
   }
 
   function move() {
@@ -68,7 +71,7 @@ export function renderRitmoGame(host, ctx) {
     notes = pattern.filter(p => !p.dead).map(p => {
       const dt = p.t - now;
       p.y = HITY - dt * PPS;
-      if (!p.hit && p.y > HITY + HITWIN) p.dead = true;  // passou: miss
+      if (!p.hit && p.y > HITY + HITWIN) { p.dead = true; tint('#ef4444'); }  // passou: miss (vermelho)
       return p;
     }).filter(p => p.y > -14);
   }
@@ -77,9 +80,11 @@ export function renderRitmoGame(host, ctx) {
     if (!playing) return;
     const cand = pattern.find(p => !p.hit && !p.dead && p.lane === lane && Math.abs(p.y - HITY) <= HITWIN);
     if (cand) {
-      cand.hit = true; cand.dead = true; hits++; flash[lane] = 12;
+      cand.hit = true; cand.dead = true; hits++; flash[lane] = 12; tint('#34d399');  // acerto: verde
       scoreEl.textContent = `${hits} / meta ${PASS}`;
       if (hits >= PASS) finish();   // bateu a meta: avança na hora
+    } else {
+      tint('#ef4444');   // apertou sem nota: erro (vermelho)
     }
   }
 
