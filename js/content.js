@@ -10,10 +10,10 @@ export const CONTENT = {
       { chaves: ['espelho'], texto: 'No espelho, alguém muito linda te encara. 💅 Nenhuma pista aqui — só vaidade saudável.' },
     ],
     codigo: '1306',
-    anagrama: { letras: 'A · E · G · I · M · V', resposta: 'viagem' },
+    anagrama: { letras: 'A · C · I · I · N · P · S', resposta: 'piscina' },
     bonus: { pista: 'as iniciais de "Dois anos de Encanto"', resposta: 'DE', dica: 'Pega a primeira letra de cada palavra que tem inicial maiúscula. 💌' },
     hints1: ['Datas se escondem em objetos do dia a dia 👀', 'Um dia e um mês, por extenso — vira número (dia, depois mês).', 'O código é 1306 — TREZE (13) de JUNHO (06). 🗓️'],
-    hints2: ['Use TODAS as letras, sem sobrar nenhuma.', 'Combina com o que te espera 😏 (começa com V, 6 letras).', 'É VIAGEM. ✈️'],
+    hints2: ['Use TODAS as letras, sem sobrar nenhuma.', 'Tem no hotel e refresca no calor 😏 (começa com P, 7 letras).', 'É PISCINA. 🏊'],
   },
   fase4: {
     musicaResposta: ['slow down', 'slowdown'],
