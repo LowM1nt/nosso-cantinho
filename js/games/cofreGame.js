@@ -60,7 +60,10 @@ export function renderCofreGame(host, { onOpen, doc = document }) {
       if (locked >= LOCKS) { done = true; msg.textContent = 'Cofre aberto! 💖'; cleanup(); setTimeout(onOpen, 500); return; }
       newZone();
     } else {
-      msg.textContent = 'Quase! Tenta de novo 🌸';
+      locked = Math.max(0, locked - 1);
+      speed = Math.max(2.4, speed - 0.6);
+      newZone();
+      msg.textContent = `Errou! perdeu uma trava 😬 (${locked}/${LOCKS})`;
       canvas.classList.remove('anim-shake'); void canvas.offsetWidth; canvas.classList.add('anim-shake');
     }
   }
