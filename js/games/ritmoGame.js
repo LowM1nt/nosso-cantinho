@@ -10,7 +10,7 @@ export function renderRitmoGame(host, ctx) {
   const LANE_KEYS = ['d', 'f', 'j', 'k'];
   const LANE_SEQ = [0, 2, 1, 3, 2, 0, 3, 1, 1, 3, 0, 2, 3, 1, 2, 0];  // usa as 4 colunas
   const LANE_COR = ['#3a2440', '#2f1d2d', '#412a3b', '#33203a'];
-  const TOTAL = 30, PASS = 22, AUDIO_START = 26;   // 22 acertos pra passar; começa ~26s pra frente
+  const TOTAL = 60, PASS = 22, AUDIO_START = 26;   // dura ~30s; 22 acertos pra passar; começa ~26s pra frente
   const BEAT = 0.5;                                 // intervalo regular entre notas (ritmo coerente)
 
   host.innerHTML = `
