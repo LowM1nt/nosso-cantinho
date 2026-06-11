@@ -17,8 +17,9 @@ export function renderMapaGame(host, { onWin, onWrong, doc = document }) {
     <p id="mapa-msg" class="text-center text-cereja mt-1 h-5">Pra onde será? 🤔</p>`;
 
   const canvas = host.querySelector('#mapa');
+  const S = 2; canvas.width = W * S; canvas.height = H * S;
   const g = canvas.getContext('2d');
-  g.imageSmoothingEnabled = false;
+  g.scale(S, S);
   const msgEl = host.querySelector('#mapa-msg');
 
   const locais = [

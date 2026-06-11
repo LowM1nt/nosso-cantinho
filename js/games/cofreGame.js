@@ -13,8 +13,9 @@ export function renderCofreGame(host, { onOpen, doc = document }) {
     <p id="cofreg-msg" class="text-center text-cereja mt-2 h-5"></p>`;
 
   const canvas = host.querySelector('#cofreg');
+  const S = 2; canvas.width = W * S; canvas.height = H * S;
   const g = canvas.getContext('2d');
-  g.imageSmoothingEnabled = false;
+  g.scale(S, S);
   const msg = host.querySelector('#cofreg-msg');
 
   const BARX = 16, BARW = W - 32, BARY = 96, BARH = 16;

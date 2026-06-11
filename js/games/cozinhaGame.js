@@ -15,22 +15,24 @@ export function renderCozinhaGame(host, { onWin, onWrong, doc = document }) {
     <p id="cozinha-msg" class="text-center text-cereja mt-1 h-5"></p>`;
 
   const canvas = host.querySelector('#cozinha');
+  const S = 2; canvas.width = W * S; canvas.height = H * S;
   const g = canvas.getContext('2d');
-  g.imageSmoothingEnabled = false;
+  g.scale(S, S);
   const scoreEl = host.querySelector('#cozinha-score');
   const msgEl = host.querySelector('#cozinha-msg');
 
   const bowl = { x: W / 2 - 18, y: H - 18, w: 36, h: 12, speed: 3 };
   const keys = new Set();
-  let items = [], meter = 0, raf = 0, frame = 0, done = false;
+  let items = [], meter = 0, raf = 0, frame = 0, spawnCount = 0, done = false;
 
   const px = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), w, h); };
 
   function spawn() {
-    const bad = (frame % 3 === 0);
+    spawnCount++;
+    const bad = (spawnCount % 4 === 0);                 // 1 estranho a cada 4 (resto é fofo)
     const set = bad ? BAD : GOOD;
-    const e = set[(frame * 7) % set.length];
-    items.push({ x: 12 + ((frame * 53) % (W - 24)), y: -8, e, bad, spd: 1.2 + ((frame % 4) * 0.18) });
+    const e = set[spawnCount % set.length];
+    items.push({ x: 12 + ((spawnCount * 47) % (W - 24)), y: -8, e, bad, spd: 1.2 + ((spawnCount % 4) * 0.18) });
   }
 
   function draw() {

@@ -28,8 +28,9 @@ export function renderQuartoGame(host, ctx, doc = document) {
   ctx.hintButton(C.hints1);
 
   const canvas = host.querySelector('#quarto');
+  const S = 2; canvas.width = W * S; canvas.height = H * S;
   const g = canvas.getContext('2d');
-  g.imageSmoothingEnabled = false;
+  g.scale(S, S);
   const cluePanel = host.querySelector('#quarto-clue');
   const codeInput = host.querySelector('#quarto-code');
 

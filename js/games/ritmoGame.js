@@ -8,7 +8,9 @@ export function renderRitmoGame(host, ctx) {
   const W = 220, H = 200, LANES = 4, laneW = W / LANES;
   const HITY = H - 26, HITWIN = 17, PPS = 92;
   const LANE_KEYS = ['d', 'f', 'j', 'k'];
-  const TOTAL = 24, PASS = 10;
+  const LANE_SEQ = [0, 2, 1, 3, 2, 0, 3, 1, 1, 3, 0, 2, 3, 1, 2, 0];  // usa as 4 colunas
+  const LANE_COR = ['#3a2440', '#2f1d2d', '#412a3b', '#33203a'];
+  const TOTAL = 24, PASS = 10, AUDIO_START = 26;   // começa ~26s pra frente
 
   host.innerHTML = `
     <p class="mb-2 text-sm">🎵 As notas caem na batida! Toque <b>D F J K</b> (ou clique nas colunas) quando a nota chegar na linha. 💖</p>
@@ -22,13 +24,15 @@ export function renderRitmoGame(host, ctx) {
   ctx.hintButton(CONTENT.fase4.hints1);
 
   const canvas = host.querySelector('#ritmo');
+  const S = 2; canvas.width = W * S; canvas.height = H * S;
   const g = canvas.getContext('2d');
-  g.imageSmoothingEnabled = false;
+  g.scale(S, S);
   const audio = host.querySelector('#ritmo-audio');
+  audio.volume = 0.5;
   const scoreEl = host.querySelector('#ritmo-score');
 
   const pattern = Array.from({ length: TOTAL }, (_, i) =>
-    ({ t: 1.2 + i * 0.62, lane: (i * 3 + (i % 2)) % LANES, y: -20, hit: false, dead: false }));
+    ({ t: 1.2 + i * 0.62, lane: LANE_SEQ[i % LANE_SEQ.length], y: -20, hit: false, dead: false }));
   let notes = [], playing = false, hits = 0, raf = 0, startAt = 0, finished = false;
   const flash = [0, 0, 0, 0];
 
@@ -37,7 +41,7 @@ export function renderRitmoGame(host, ctx) {
   function draw() {
     px(0, 0, W, H, '#2b1b2b');
     for (let l = 0; l < LANES; l++) {
-      px(l * laneW, 0, laneW - 1, H, l % 2 ? '#352134' : '#2f1d2d');
+      px(l * laneW, 0, laneW - 1, H, LANE_COR[l]);
       if (flash[l] > 0) { g.fillStyle = `rgba(255,120,170,${flash[l] / 12})`; g.fillRect(l * laneW, 0, laneW - 1, H); flash[l]--; }
     }
     px(0, HITY - 2, W, 4, '#ff7aa8');
@@ -87,7 +91,7 @@ export function renderRitmoGame(host, ctx) {
     pattern.forEach((p, i) => { p.hit = false; p.dead = false; p.t = 1.2 + i * 0.62; p.y = -20; });
     hits = 0; finished = false; scoreEl.textContent = `0 / ${TOTAL}`;
     playing = true; startAt = Date.now();
-    try { audio.currentTime = 0; } catch { /* */ }
+    try { audio.currentTime = AUDIO_START; } catch { /* */ }
     audio.play().catch(() => { /* */ });
   }
 
