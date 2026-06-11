@@ -1,5 +1,5 @@
 import { CONFIG } from './config.js';
-import { loadState, saveState } from './state.js';
+import { loadState, saveState, setPhaseStep } from './state.js';
 import { showScreen } from './router.js';
 import { fetchServerDate, saoPauloWeekday, mapWeekdayToPhase } from './timeGating.js';
 import { renderLogin } from './screens/login.js';
@@ -39,9 +39,12 @@ async function enterHub() {
   renderHub(state, faseHoje, (fase, atual) => {
     // BYPASS-DEV: libera qualquer dia/cofre sem checar data. Remover depois.
     if (BYPASS) return fase === 5 ? goCofre() : goEnigma(fase);
-    if (fase === 5 && phase.tipo === 'cofre') return goCofre();
+    if (fase === 5) {
+      if (state.cofreAberto || phase.tipo === 'cofre') return goCofre();  // revisitar / abrir no sábado
+      return goBloqueio('futuro');
+    }
+    if (state.diasConcluidos[dayKey(fase)]) return goEnigma(fase, true);  // revisitar dia concluído
     if (!atual) return goBloqueio('futuro');       // clicked a future/locked day
-    if (state.diasConcluidos[dayKey(fase)]) return goBloqueio('concluido');
     goEnigma(fase);
   });
   showScreen('screen-hub');
@@ -51,10 +54,11 @@ function dayKey(fase) { return ['', 'terca', 'quarta', 'quinta', 'sexta'][fase];
 
 function goBloqueio(motivo) { renderBloqueio(motivo, enterHub); showScreen('screen-bloqueio'); }
 
-function goEnigma(fase) {
+function goEnigma(fase, replay = false) {
+  if (replay) { state = setPhaseStep(state, fase, 0); persist(); }   // revisita: reinicia as etapas
   renderEnigma(fase, state, persist, {
-    // BYPASS-DEV: no teste volta pro hub após resolver (em vez do bloqueio). Remover depois.
-    onSolved: () => { state = loadState(storage); BYPASS ? enterHub() : goBloqueio('concluido'); },
+    // BYPASS ou revisita: volta pro jardim ao terminar (em vez de bloquear).
+    onSolved: () => { state = loadState(storage); (BYPASS || replay) ? enterHub() : goBloqueio('concluido'); },
     onBack: enterHub,
   });
   showScreen('screen-enigma');

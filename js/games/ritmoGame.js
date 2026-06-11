@@ -10,15 +10,15 @@ export function renderRitmoGame(host, ctx) {
   const LANE_KEYS = ['d', 'f', 'j', 'k'];
   const LANE_SEQ = [0, 2, 1, 3, 2, 0, 3, 1, 1, 3, 0, 2, 3, 1, 2, 0];  // usa as 4 colunas
   const LANE_COR = ['#3a2440', '#2f1d2d', '#412a3b', '#33203a'];
-  const TOTAL = 60, PASS = 22, AUDIO_START = 26;   // dura ~30s; 22 acertos pra passar; começa ~26s pra frente
-  const BEAT = 0.5;                                 // intervalo regular entre notas (ritmo coerente)
+  const BEAT = 0.5, START_T = 1.2;                  // intervalo regular; música inteira do começo
+  let PASS = 30;                                    // meta de acertos (ajusta pelo tamanho da música)
 
   host.innerHTML = `
     <p class="mb-2 text-sm">🎵 As notas caem na batida! Toque <b>D F J K</b> (ou clique nas colunas) quando a nota chegar na linha. 💖</p>
     <canvas id="ritmo" width="${W}" height="${H}" class="pixel-canvas rounded-xl border-2 border-rosa mb-2"></canvas>
     <div class="flex items-center justify-between gap-2">
       <button id="ritmo-start" class="rounded-full bg-cereja text-marfim font-titulo px-5 py-2 btn-glow">▶ Tocar</button>
-      <span id="ritmo-score" class="text-sm font-titulo">0 / ${TOTAL}</span>
+      <span id="ritmo-score" class="text-sm font-titulo">0</span>
       <button id="ritmo-skip" class="text-xs underline opacity-80">prefiro digitar 🎵</button>
     </div>
     <audio id="ritmo-audio" src="${src}" preload="auto"></audio>`;
@@ -30,11 +30,18 @@ export function renderRitmoGame(host, ctx) {
   g.scale(S, S);
   const audio = host.querySelector('#ritmo-audio');
   audio.volume = 0.9;
+  audio.addEventListener('ended', () => { if (playing) finish(); });
   const scoreEl = host.querySelector('#ritmo-score');
 
-  const pattern = Array.from({ length: TOTAL }, (_, i) =>
-    ({ t: 1.5 + i * BEAT, lane: LANE_SEQ[i % LANE_SEQ.length], y: -20, hit: false, dead: false }));
-  let notes = [], playing = false, hits = 0, raf = 0, startAt = 0, finished = false;
+  let pattern = [], notes = [], playing = false, hits = 0, raf = 0, startAt = 0, finished = false;
+
+  function buildPattern() {
+    const dur = (audio.duration && isFinite(audio.duration)) ? audio.duration : 80;
+    const n = Math.max(20, Math.floor((dur - START_T - 0.6) / BEAT));
+    pattern = Array.from({ length: n }, (_, i) =>
+      ({ t: START_T + i * BEAT, lane: LANE_SEQ[i % LANE_SEQ.length], y: -20, hit: false, dead: false }));
+    PASS = Math.min(30, Math.max(15, Math.round(pattern.length * 0.45)));
+  }
   const flash = [0, 0, 0, 0];
 
   const px = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), w, h); };
@@ -68,7 +75,7 @@ export function renderRitmoGame(host, ctx) {
   function tryHit(lane) {
     if (!playing) return;
     const cand = pattern.find(p => !p.hit && !p.dead && p.lane === lane && Math.abs(p.y - HITY) <= HITWIN);
-    if (cand) { cand.hit = true; cand.dead = true; hits++; flash[lane] = 12; scoreEl.textContent = `${hits} / ${TOTAL}`; }
+    if (cand) { cand.hit = true; cand.dead = true; hits++; flash[lane] = 12; scoreEl.textContent = `${hits} / meta ${PASS}`; }
   }
 
   function loop() {
@@ -76,7 +83,7 @@ export function renderRitmoGame(host, ctx) {
     if (playing) move();
     draw();
     const now = (Date.now() - startAt) / 1000;
-    if (playing && !finished && now > pattern[pattern.length - 1].t + 1.3) finish();
+    if (playing && !finished && pattern.length && now > pattern[pattern.length - 1].t + 1.3) finish();
     raf = requestAnimationFrame(loop);
   }
 
@@ -89,10 +96,11 @@ export function renderRitmoGame(host, ctx) {
 
   function start() {
     if (playing) return;
-    pattern.forEach((p, i) => { p.hit = false; p.dead = false; p.t = 1.5 + i * BEAT; p.y = -20; });
-    hits = 0; finished = false; scoreEl.textContent = `0 / ${TOTAL}`;
+    buildPattern();
+    hits = 0; finished = false; scoreEl.textContent = `0 / meta ${PASS}`;
     playing = true; startAt = Date.now();
-    try { audio.currentTime = AUDIO_START; } catch { /* */ }
+    const bg = document.getElementById('bg-music'); if (bg) { try { bg.pause(); } catch { /* */ } }  // muta o fundo
+    try { audio.currentTime = 0; } catch { /* */ }                                                    // música inteira
     audio.play().catch(() => { /* */ });
   }
 

@@ -18,7 +18,7 @@ export function renderHub(state, faseHoje, onPickDay, doc = document) {
       || (d.fase === 5 && state.cofreAberto); // sábado vira "concluído" após abrir o cofre
     const atual = d.fase === faseHoje;
     let visual, label;
-    if (concluido)      { visual = 'glass border-4 border-emerald-300'; label = '🌈 💚'; }
+    if (concluido)      { visual = 'glass border-4 border-emerald-300 cursor-pointer hover-lift'; label = '🌈 rever'; }
     else if (atual)     { visual = 'glass-strong border-4 border-cereja anim-shimmer cursor-pointer hover-lift'; label = '✨ Hoje!'; }
     else                { visual = 'bg-white/30 text-gray-400 border border-white/50'; label = '😴🔒'; }
     return `<button data-fase="${d.fase}" data-atual="${atual}"
