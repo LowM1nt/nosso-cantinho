@@ -21,7 +21,7 @@ export function runPhase(host, { fase, steps, bonus, state, persist, doc = docum
     const step = all[idx];
     const rotulo = step._bonus ? '🎁 Baú secreto' : `Etapa ${idx + 1}/${steps.length}`;
     host.innerHTML = `${drawProgress()}
-      <div class="text-center text-sm mb-2 opacity-70">${rotulo}</div>
+      <div class="text-center text-sm mb-2 opacity-70">${idx > 0 ? '<button id="step-back" class="underline mr-2">← etapa anterior</button>' : ''}${rotulo}</div>
       <h3 class="font-titulo text-cereja text-center mb-3">${step.titulo}</h3>
       <div id="step-host" class="anim-fadeup"></div>
       <div id="hint-zone" class="text-center mt-3"></div>
@@ -30,6 +30,13 @@ export function runPhase(host, { fase, steps, bonus, state, persist, doc = docum
     const stepHost = host.querySelector('#step-host');
     const hintZone = host.querySelector('#hint-zone');
     const msgEl = host.querySelector('#step-msg');
+    const backBtn = host.querySelector('#step-back');
+    if (backBtn) backBtn.addEventListener('click', () => {
+      idx = Math.max(0, idx - 1);
+      Object.assign(state, setPhaseStep(state, fase, idx));
+      persist();
+      renderStep();   // o jogo/etapa anterior é re-renderizado; jogos com canvas se limpam sozinhos
+    });
     let attempts = 0;
     const startedAt = Date.now();
     let hints = null;
