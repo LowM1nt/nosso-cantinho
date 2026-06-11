@@ -6,7 +6,7 @@ import { answerMatches } from '../engine/answer.js';
 export function renderQuartoGame(host, ctx, doc = document) {
   const C = CONTENT.fase3;
   const clueFor = key => (C.objetos.find(o => o.chaves.includes(key)) || {}).texto || '...';
-  const W = 220, H = 150;
+  const W = 300, H = 210;
 
   host.innerHTML = `
     <p class="mb-2 text-sm">🎮 Ande pelo quarto (<b>setas/WASD</b> ou clique nos objetos). Perto de algo, aperte <b>espaço</b> pra olhar. Ache o <b>código de 4 números</b>. 🗝️</p>
@@ -35,15 +35,19 @@ export function renderQuartoGame(host, ctx, doc = document) {
   const codeInput = host.querySelector('#quarto-code');
 
   const objetos = [
-    { key: 'calendario', x: 20,  y: 26, w: 22, h: 22, label: 'calendário' },
-    { key: 'espelho',    x: 100, y: 24, w: 16, h: 28, label: 'espelho' },
-    { key: 'retrato',    x: 150, y: 28, w: 24, h: 18, label: 'retrato' },
-    { key: 'guarda',     x: 16,  y: 78, w: 28, h: 54, label: 'guarda-roupa' },
-    { key: 'meia',       x: 74,  y: 108, w: 26, h: 18, label: 'gaveta' },
-    { key: 'cama',       x: 150, y: 96, w: 56, h: 38, label: 'cama' },
+    { key: 'calendario', x: 24,  y: 28,  w: 24, h: 24, label: 'calendário' },
+    { key: 'espelho',    x: 132, y: 26,  w: 18, h: 30, label: 'espelho' },
+    { key: 'retrato',    x: 196, y: 30,  w: 26, h: 20, label: 'retrato' },
+    { key: 'guarda',     x: 20,  y: 112, w: 32, h: 64, label: 'guarda-roupa' },
+    { key: 'meia',       x: 96,  y: 150, w: 30, h: 20, label: 'gaveta' },
+    { key: 'cama',       x: 212, y: 130, w: 70, h: 50, label: 'cama' },
+    { key: 'quadro',     x: 250, y: 26,  w: 30, h: 24, label: 'quadro',  flavor: 'Um quadro tortinho. Você endireita — satisfação 🖼️ (sem pista)' },
+    { key: 'planta',     x: 150, y: 150, w: 22, h: 30, label: 'planta',  flavor: 'Uma plantinha meio murcha. Precisa de água (e de amor) 🌱' },
+    { key: 'abajur',     x: 72,  y: 62,  w: 16, h: 28, label: 'abajur',  flavor: 'Um abajur fofo. Ilumina o quarto, mas não revela nada 💡' },
+    { key: 'tapete',     x: 116, y: 112, w: 44, h: 26, label: 'tapete',  flavor: 'Você olha embaixo do tapete... clássico! Mas só poeira ✨' },
   ];
 
-  const kitty = { x: W / 2 - 7, y: H / 2, w: 14, h: 14, speed: 1.5 };
+  const kitty = { x: W / 2 - 7, y: H / 2, w: 14, h: 14, speed: 1.7 };
   const keys = new Set();
   let near = null;
   let raf = 0;
@@ -79,6 +83,14 @@ export function renderQuartoGame(host, ctx, doc = document) {
       px(x + 2, y, w - 4, h - 10, '#ff9ec0');            // colchão
       px(x + 3, y + 2, 16, 10, '#fff');                  // travesseiro
       px(x + 2, y + h - 18, w - 4, 6, '#ff7aa8');        // dobra do edredom
+    } else if (key === 'quadro') {
+      px(x, y, w, h, '#8a5a3c'); px(x + 2, y + 2, w - 4, h - 4, '#cfe8f0'); px(x + 5, y + 5, 6, 6, '#ffd1dc');
+    } else if (key === 'planta') {
+      px(x + w / 2 - 2, y + h - 10, 4, 10, '#8a5a3c'); px(x + 2, y, w - 4, h - 10, '#7cc47c');
+    } else if (key === 'abajur') {
+      px(x + 1, y, w - 2, 8, '#ffe08a'); px(x + w / 2 - 1, y + 8, 2, h - 8, '#a9744f');
+    } else if (key === 'tapete') {
+      px(x, y + h / 2, w, h / 2, '#f3b6cf'); px(x + 4, y + h / 2 + 3, w - 8, 2, '#fff');
     }
     // rótulo
     g.fillStyle = '#6B4F4F'; g.font = '6px sans-serif'; g.textAlign = 'center';
@@ -121,7 +133,7 @@ export function renderQuartoGame(host, ctx, doc = document) {
     update(); render(); raf = requestAnimationFrame(loop);
   }
 
-  function inspect(o) { if (o) cluePanel.textContent = clueFor(o.key); }
+  function inspect(o) { if (o) cluePanel.textContent = o.flavor || clueFor(o.key); }
 
   // ---- controles ----
   const keymap = { ArrowLeft: 'left', a: 'left', ArrowRight: 'right', d: 'right',

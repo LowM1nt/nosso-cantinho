@@ -10,7 +10,8 @@ export function renderRitmoGame(host, ctx) {
   const LANE_KEYS = ['d', 'f', 'j', 'k'];
   const LANE_SEQ = [0, 2, 1, 3, 2, 0, 3, 1, 1, 3, 0, 2, 3, 1, 2, 0];  // usa as 4 colunas
   const LANE_COR = ['#3a2440', '#2f1d2d', '#412a3b', '#33203a'];
-  const TOTAL = 24, PASS = 10, AUDIO_START = 26;   // começa ~26s pra frente
+  const TOTAL = 30, PASS = 22, AUDIO_START = 26;   // 22 acertos pra passar; começa ~26s pra frente
+  const BEAT = 0.5;                                 // intervalo regular entre notas (ritmo coerente)
 
   host.innerHTML = `
     <p class="mb-2 text-sm">🎵 As notas caem na batida! Toque <b>D F J K</b> (ou clique nas colunas) quando a nota chegar na linha. 💖</p>
@@ -32,7 +33,7 @@ export function renderRitmoGame(host, ctx) {
   const scoreEl = host.querySelector('#ritmo-score');
 
   const pattern = Array.from({ length: TOTAL }, (_, i) =>
-    ({ t: 1.2 + i * 0.62, lane: LANE_SEQ[i % LANE_SEQ.length], y: -20, hit: false, dead: false }));
+    ({ t: 1.5 + i * BEAT, lane: LANE_SEQ[i % LANE_SEQ.length], y: -20, hit: false, dead: false }));
   let notes = [], playing = false, hits = 0, raf = 0, startAt = 0, finished = false;
   const flash = [0, 0, 0, 0];
 
@@ -88,7 +89,7 @@ export function renderRitmoGame(host, ctx) {
 
   function start() {
     if (playing) return;
-    pattern.forEach((p, i) => { p.hit = false; p.dead = false; p.t = 1.2 + i * 0.62; p.y = -20; });
+    pattern.forEach((p, i) => { p.hit = false; p.dead = false; p.t = 1.5 + i * BEAT; p.y = -20; });
     hits = 0; finished = false; scoreEl.textContent = `0 / ${TOTAL}`;
     playing = true; startAt = Date.now();
     try { audio.currentTime = AUDIO_START; } catch { /* */ }

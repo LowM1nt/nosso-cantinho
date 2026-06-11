@@ -1,7 +1,7 @@
 import { CONFIG } from '../config.js';
 import { normalizeText } from '../normalize.js';
 import { imgFb } from '../ui-img.js';
-import { renderFlappy } from '../games/flappyGame.js';
+import { openFlappy } from '../games/flappyModal.js';
 
 // onSuccess() is called after the page-flip animation completes.
 export function renderLogin(onSuccess, doc = document) {
@@ -47,26 +47,4 @@ export function renderLogin(onSuccess, doc = document) {
 
   doc.getElementById('login-btn').addEventListener('click', tryUnlock);
   input.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
-}
-
-// Modal com o jogo infinito (Flappy Kitty) pra passar o tempo.
-function openFlappy(doc) {
-  if (doc.getElementById('flappy-modal')) return;
-  const modal = doc.createElement('div');
-  modal.id = 'flappy-modal';
-  modal.className = 'fixed inset-0 z-[60] flex items-center justify-center p-4';
-  modal.style.background = 'rgba(60,20,40,.45)';
-  modal.innerHTML = `
-    <div class="glass-strong rounded-3xl p-4 w-full max-w-xs text-center anim-fadeup">
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="font-titulo text-cereja">Flappy Kitty 🐱</h3>
-        <button id="flappy-close" class="rounded-full glass w-8 h-8 font-titulo text-cereja">✕</button>
-      </div>
-      <div id="flappy-host"></div>
-    </div>`;
-  doc.body.appendChild(modal);
-  const cleanup = renderFlappy(doc.getElementById('flappy-host'), { doc });
-  const close = () => { if (cleanup) cleanup(); modal.remove(); };
-  doc.getElementById('flappy-close').addEventListener('click', close);
-  modal.addEventListener('click', e => { if (e.target === modal) close(); });
 }

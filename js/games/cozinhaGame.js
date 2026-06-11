@@ -29,7 +29,7 @@ export function renderCozinhaGame(host, { onWin, onWrong, doc = document }) {
 
   function spawn() {
     spawnCount++;
-    const bad = (spawnCount % 4 === 0);                 // 1 estranho a cada 4 (resto é fofo)
+    const bad = (spawnCount % 2 === 0);                 // metade estranhos (mais difícil de mirar)
     const set = bad ? BAD : GOOD;
     const e = set[spawnCount % set.length];
     items.push({ x: 12 + ((spawnCount * 47) % (W - 24)), y: -8, e, bad, spd: 1.2 + ((spawnCount % 4) * 0.18) });

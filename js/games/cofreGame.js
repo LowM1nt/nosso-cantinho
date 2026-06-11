@@ -6,7 +6,7 @@ export function renderCofreGame(host, { onOpen, doc = document }) {
     <div class="text-center mb-2">
       <div class="text-6xl mb-1 anim-float">💎🔐</div>
       <h2 class="font-titulo text-2xl text-cereja">Arrombe o cofre!</h2>
-      <p class="text-sm">Trave o cursor na <b>faixa rosa</b> — 4 vezes pra abrir 💝</p>
+      <p class="text-sm">Trave o cursor na <b>faixa rosa</b> — <b>6 vezes</b> pra abrir (fica mais rápido!) 💝</p>
     </div>
     <canvas id="cofreg" width="${W}" height="${H}" class="pixel-canvas rounded-xl border-2 border-rosa mb-2"></canvas>
     <button id="cofreg-lock" class="w-full rounded-full bg-cereja text-marfim font-titulo py-3 btn-glow">🔒 Travar (espaço)</button>
@@ -18,10 +18,10 @@ export function renderCofreGame(host, { onOpen, doc = document }) {
   g.scale(S, S);
   const msg = host.querySelector('#cofreg-msg');
 
-  const BARX = 16, BARW = W - 32, BARY = 96, BARH = 16;
-  let cursor = BARX, dir = 1, speed = 2.0, locked = 0, raf = 0, done = false;
+  const BARX = 16, BARW = W - 32, BARY = 96, BARH = 16, LOCKS = 6;
+  let cursor = BARX, dir = 1, speed = 2.4, locked = 0, raf = 0, done = false;
   let zoneX = 0, zoneW = 0;
-  function newZone() { zoneW = Math.max(26, 50 - locked * 6); zoneX = BARX + 20 + ((locked * 53) % (BARW - 40 - zoneW)); }
+  function newZone() { zoneW = Math.max(15, 44 - locked * 5); zoneX = BARX + 16 + ((locked * 67) % (BARW - 32 - zoneW)); }
   newZone();
 
   const px = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), w, h); };
@@ -34,7 +34,7 @@ export function renderCofreGame(host, { onOpen, doc = document }) {
     g.strokeStyle = '#7c848d'; g.lineWidth = 2; g.beginPath(); g.arc(110, 43, 16, 0, Math.PI * 2); g.stroke();
     px(109, 27, 2, 16, '#7c848d'); px(110, 42, 14, 2, '#7c848d');
     // cadeados (progresso)
-    for (let i = 0; i < 4; i++) px(74 + i * 20, 72, 14, 8, i < locked ? '#34d399' : '#e79bb6');
+    for (let i = 0; i < LOCKS; i++) px(68 + i * 14, 72, 11, 8, i < locked ? '#34d399' : '#e79bb6');
     // barra
     px(BARX, BARY, BARW, BARH, '#fff');
     px(zoneX, BARY, zoneW, BARH, '#ff7aa8');          // zona alvo
@@ -56,8 +56,8 @@ export function renderCofreGame(host, { onOpen, doc = document }) {
   function lock() {
     if (done) return;
     if (cursor >= zoneX && cursor <= zoneX + zoneW) {
-      locked++; speed += 0.7; msg.textContent = `Tranca ${locked}/4 aberta! 💚`;
-      if (locked >= 4) { done = true; msg.textContent = 'Cofre aberto! 💖'; cleanup(); setTimeout(onOpen, 500); return; }
+      locked++; speed += 0.6; msg.textContent = `Tranca ${locked}/${LOCKS} aberta! 💚`;
+      if (locked >= LOCKS) { done = true; msg.textContent = 'Cofre aberto! 💖'; cleanup(); setTimeout(onOpen, 500); return; }
       newZone();
     } else {
       msg.textContent = 'Quase! Tenta de novo 🌸';

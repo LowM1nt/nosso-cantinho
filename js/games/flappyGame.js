@@ -31,20 +31,25 @@ export function renderFlappy(host, { doc = document, win = window } = {}) {
 
   const px = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), w, h); };
 
+  function cloud(cx, cy) {
+    g.fillStyle = 'rgba(255,255,255,.9)';
+    g.fillRect(cx, cy, 22, 7); g.fillRect(cx + 5, cy - 4, 13, 6); g.fillRect(cx + 11, cy + 2, 16, 6);
+  }
+
   function drawKitty(x, y) {
     px(x + 1, y + 3, 14, 10, '#fff');
     px(x + 1, y, 3, 4, '#fff'); px(x + 11, y, 3, 4, '#fff');
     px(x + 10, y - 1, 5, 3, '#D72638');
     px(x + 5, y + 6, 1, 2, '#222'); px(x + 11, y + 6, 1, 2, '#222');
     px(x + 8, y + 8, 2, 1, '#f4b400');
-    px(x - 2, y + 5, 3, 5, '#ffd1dc');   // asinha
   }
 
   function draw() {
-    // céu
-    px(0, 0, W, H, '#ffe3ec');
-    px(0, 0, W, 40, '#ffd1dc');
-    px(28, 18, 22, 8, '#fff'); px(120, 30, 26, 9, '#fff'); px(170, 14, 18, 7, '#fff'); // nuvens
+    // céu com degradê suave
+    const sky = g.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, '#ffdce8'); sky.addColorStop(1, '#fff0f5');
+    g.fillStyle = sky; g.fillRect(0, 0, W, H);
+    cloud(28, 28); cloud(132, 50); cloud(178, 20);
     // canos
     pipes.forEach(p => {
       px(p.x, 0, PIPE_W, p.gapY, '#ff7aa8'); px(p.x - 2, p.gapY - 6, PIPE_W + 4, 6, '#ff5e8a');

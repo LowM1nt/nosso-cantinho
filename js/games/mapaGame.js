@@ -1,7 +1,7 @@
 // Jogo (desktop) da Fase 2: leve a gatinha (setas/WASD/dpad ou clique) até o lugar
 // do nosso primeiro encontro 🛍️. Chega no certo -> onWin().
 export function renderMapaGame(host, { onWin, onWrong, doc = document }) {
-  const W = 220, H = 150;
+  const W = 320, H = 230;
 
   host.innerHTML = `
     <p class="mb-2 text-sm">🗺️ Leve a gatinha até onde foi <b>nosso primeiro encontro</b> 👣 (setas/WASD ou clique no mapa).</p>
@@ -23,13 +23,15 @@ export function renderMapaGame(host, { onWin, onWrong, doc = document }) {
   const msgEl = host.querySelector('#mapa-msg');
 
   const locais = [
-    { id: 'shopping', x: 146, y: 24, w: 54, h: 38, label: 'shopping', cor: '#f4a8c4', win: true, txt: 'Aqui! Nosso primeiro encontro 💗' },
-    { id: 'cafe',     x: 22,  y: 26, w: 24, h: 20, label: 'café',     cor: '#b98a5e', win: false, txt: 'Um cafézinho gostoso... mas não foi aqui ☕' },
-    { id: 'parque',   x: 28,  y: 98, w: 20, h: 26, label: 'parque',   cor: '#7cc47c', win: false, txt: 'O parque é lindo, mas não 🌳' },
-    { id: 'flores',   x: 110, y: 110, w: 18, h: 14, label: 'flores',  cor: '#ff8fb1', win: false, txt: 'Que cheirinho de flores 🌷 mas não é aqui' },
+    { id: 'shopping', x: 232, y: 30,  w: 74, h: 56, label: 'shopping',   cor: '#f4a8c4', win: true,  txt: 'Aqui! Nosso primeiro encontro 💗' },
+    { id: 'cafe',     x: 24,  y: 32,  w: 36, h: 28, label: 'café',       cor: '#b98a5e', win: false, txt: 'Um cafézinho gostoso... mas não foi aqui ☕' },
+    { id: 'sorvete',  x: 132, y: 28,  w: 36, h: 26, label: 'sorveteria', cor: '#ffd27a', win: false, txt: 'Sorvete! 🍦 mas não rolou aqui' },
+    { id: 'parque',   x: 34,  y: 150, w: 30, h: 42, label: 'parque',     cor: '#7cc47c', win: false, txt: 'O parque é lindo, mas não 🌳' },
+    { id: 'cinema',   x: 228, y: 150, w: 72, h: 48, label: 'cinema',     cor: '#9aa6e0', win: false, txt: 'Cinema com pipoca 🍿 mas não foi aqui' },
+    { id: 'flores',   x: 150, y: 168, w: 28, h: 22, label: 'flores',     cor: '#ff8fb1', win: false, txt: 'Que cheirinho de flores 🌷 mas não é aqui' },
   ];
 
-  const kitty = { x: 60, y: H - 22, w: 14, h: 14, speed: 1.5 };
+  const kitty = { x: 152, y: H - 28, w: 14, h: 14, speed: 1.9 };
   const keys = new Set();
   let raf = 0, done = false, near = null;
 
@@ -38,8 +40,8 @@ export function renderMapaGame(host, { onWin, onWrong, doc = document }) {
   function drawMap() {
     px(0, 0, W, H, '#bfe3a6');                              // grama
     for (let x = 0; x < W; x += 9) for (let y = 0; y < H; y += 9) if ((x + y) % 18 === 0) px(x, y, 4, 4, '#b2dd96');
-    px(W / 2 - 6, 40, 12, H - 40, '#e8d8b0');               // caminho vertical
-    px(20, 70, W - 40, 10, '#e8d8b0');                      // caminho horizontal
+    px(W / 2 - 7, 56, 14, H - 56, '#e8d8b0');               // caminho vertical
+    px(24, 104, W - 48, 12, '#e8d8b0');                     // caminho horizontal
   }
 
   function drawLocal(l) {

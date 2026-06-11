@@ -1,4 +1,5 @@
 import { imgFb } from '../ui-img.js';
+import { openFlappy } from '../games/flappyModal.js';
 
 const DIAS = [
   { fase: 1, key: 'terca',  nome: 'Terça',  emoji: '🍓' },
@@ -34,8 +35,12 @@ export function renderHub(state, faseHoje, onPickDay, doc = document) {
       <h1 class="font-titulo text-2xl text-cereja text-center">Jardim dos Laços 🎀</h1>
     </div>
     <p class="text-center text-sm mb-5">Fragmentos: ${state.fragmentosColetados.join(' ') || '—'}</p>
-    <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 max-w-3xl mx-auto">${cards}</div>`;
+    <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 max-w-3xl mx-auto">${cards}</div>
+    <div class="text-center mt-8">
+      <button id="hub-flappy" class="rounded-full glass px-5 py-2 font-titulo text-cereja hover-lift">🎮 joguinho enquanto isso</button>
+    </div>`;
 
+  el.querySelector('#hub-flappy').addEventListener('click', () => openFlappy(doc));
   el.querySelectorAll('button[data-fase]').forEach(btn => {
     btn.addEventListener('click', () => onPickDay(Number(btn.dataset.fase), btn.dataset.atual === 'true'));
   });
